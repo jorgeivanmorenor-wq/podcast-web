@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Entre Estudiantes - Podcast</title>
+
+  <!-- Firebase (compat) -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+  <style>
+    body { margin:0; font-family: Arial; background:#0f172a; color:#fff; }
+    .container { max-width: 900px; margin:auto; padding:20px; }
+    h1 { color:#22c55e; text-align:center; }
+    input { padding:10px; margin:6px; border-radius:6px; border:none; width:60%; }
+    button { padding:10px 12px; margin:6px; border:none; border-radius:6px; background:#22c55e; color:#fff; cursor:pointer; }
+    button:hover { background:#16a34a; }
+    .card { background:#1e293b; padding:14px; margin:14px 0; border-radius:10px; }
+    audio { width:100%; margin-top:8px; }
+    .chat-box { background:#1e293b; padding:10px; border-radius:10px; height:150px; overflow-y:auto; margin-bottom:10px; text-align:left; }
+    .row { text-align:center; }
+    .comments { text-align:left; margin-top:10px; }
+    .comment-input { width:70%; }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <h1>🎙️ Entre Estudiantes</h1>
+
+  <!-- LOGIN -->
+  <div class="row">
+    <button onclick="login()">Iniciar sesión</button>
+  </div>
+
+  <!-- AGREGAR PODCAST -->
+  <h2>Agregar episodio</h2>
+  <div class="row">
+    <input id="title" placeholder="Título del episodio">
+    <br>
+    <input id="audioURL" placeholder="Link directo (.mp3)">
+    <br>
+    <button onclick="addPodcast()">Agregar Podcast</button>
+  </div>
+
+  <!-- LISTA -->
+  <h2>Episodios</h2>
+  <div id="podcasts"></div>
+
+  <!-- CHAT GENERAL -->
+  <h2>Chat general</h2>
+  <div class="chat-box" id="chatBox"></div>
+  <div class="row">
+    <input id="chatInput" placeholder="Escribe un mensaje">
+    <button onclick="sendMessage()">Enviar</button>
+  </div>
+
+  <!-- VOTOS -->
+  <h2>¿Te gustó la página?</h2>
+  <div class="row">
+    <button onclick="vote('si')">👍</button>
+    <button onclick="vote('no')">👎</button>
+  </div>
+
+</div>
+
+<script>
+/* ====== CONFIG FIREBASE ====== */
+const firebaseConfig = {
+  apiKey: "AIzaSyDz5tYhKP1gX2UToItY0VarGLCJLoffjbg",
+  authDomain: "entre-estudiantes.firebaseapp.com",
+  projectId: "entre-estudiantes",
+  storageBucket: "entre-estudiantes.appspot.com",
+  messagingSenderId: "923649714953",
+  appId: "1:923649714953:web:a3abb689349c96df66c1d8"
+};
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+/* ====== LOGIN ====== */
+function login() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider).catch(e => alert("Error login: " + e));
+}
+
+/* ====== AGREGAR PODCAST (con validación .mp3) ====== */
+function addPodcast() {
+  const title = document.getElementById("title").value.trim();
+  const url = document.getElementById("audioURL").value.trim();
+
+  if (!title) {
+    alert("Escribe un título");
+    return;
+  }
+  if (!url.endsWith(".mp3")) {
+    alert("El link debe ser un audio (.mp3)");
+    return;
+  }
+
+  db.collection("podcasts").add({
+    title: title,
+    url: url,
+    createdAt: Date.now()
+  }).then(() => {
+    alert("Podcast guardado");
+    document.getElementById("title").value = "";
+    document.getElementById("audioURL").value = "";
+    loadPodcasts();
+  }).catch(e => alert("Error: " + e));
+}
+
+/* ====== MOSTRAR PODCASTS + COMENTARIOS POR EPISODIO ====== */
+function loadPodcasts() {
+  db.collection("podcasts").orderBy("createdAt", "desc").get().then(snapshot => {
+    const container = document.getElementById("podcasts");
+    container.innerHTML = "";
+
+    if (snapshot.empty) {
+      container.innerHTML = "No hay episodios aún";
+      return;
+    }
+
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      const id = doc.id;
+
+      const card = document.createElement("div");
+      card.className = "card";
+
+      // TÍTULO
+      const h = document.createElement("h3");
+      h.textContent = data.title;
+
+      // AUDIO
+      const audio = document.createElement("audio");
+      audio.controls = true;
+      audio.src = data.url;
+
+      // INPUT COMENTARIO
+      const input = document.createElement("input");
+      input.className = "comment-input";
+      input.placeholder = "Comentar este episodio";
+
+      const btn = document.createElement("button");
+      btn.textContent = "Comentar";
+
+      const commentsDiv = document.createElement("div");
+      commentsDiv.className = "comments";
+
+      // GUARDAR COMENTARIO
+      btn.onclick = () => {
+        const text = input.value.trim();
+        if (!text) return;
+
+        db.collection("podcasts")
+          .doc(id)
+          .collection("comments")
+          .add({
+            text: text,
+            time: Date.now()
+          });
+
+        input.value = "";
+      };
+
+      // ESCUCHAR COMENTARIOS EN TIEMPO REAL
+      db.collection("podcasts")
+        .doc(id)
+        .collection("comments")
+        .orderBy("time")
+        .onSnapshot(snap => {
+          commentsDiv.innerHTML = "";
+          snap.forEach(c => {
+            const p = document.createElement("p");
+            p.textContent = c.data().text;
+            commentsDiv.appendChild(p);
+          });
+        });
+
+      card.appendChild(h);
+      card.appendChild(audio);
+      card.appendChild(input);
+      card.appendChild(btn);
+      card.appendChild(commentsDiv);
+
+      container.appendChild(card);
+    });
+  });
+}
+
+loadPodcasts();
+
+/* ====== CHAT GENERAL ====== */
+function sendMessage() {
+  const text = document.getElementById("chatInput").value.trim();
+  if (!text) return;
+
+  db.collection("chat").add({
+    text: text,
+    time: Date.now()
+  });
+
+  document.getElementById("chatInput").value = "";
+}
+
+db.collection("chat").orderBy("time")
+.onSnapshot(snapshot => {
+  const chatBox = document.getElementById("chatBox");
+  chatBox.innerHTML = "";
+
+  snapshot.forEach(doc => {
+    const p = document.createElement("p");
+    p.textContent = doc.data().text;
+    chatBox.appendChild(p);
+  });
+});
+
+/* ====== VOTOS ====== */
+function vote(option) {
+  db.collection("votes").add({ vote: option });
+  alert("Gracias por votar");
+}
+</script>
+
+</body>
+</html>
