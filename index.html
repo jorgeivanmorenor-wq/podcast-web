@@ -1,126 +1,184 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Entre Estudiantes</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entre Estudiantes</title>
 
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-      background: #121212;
-      color: white;
-    }
+<style>
+body{
+  margin:0;
+  font-family:Arial;
+  background: radial-gradient(circle at 20% 20%, #1a0033, #000);
+  color:white;
+}
 
-    .header {
-      background: black;
-      padding: 20px;
-      text-align: center;
-      font-size: 24px;
-      font-weight: bold;
-    }
+/* NAV */
+.nav{
+  display:flex;
+  justify-content:space-between;
+  padding:20px 40px;
+  align-items:center;
+}
 
-    .container {
-      max-width: 900px;
-      margin: auto;
-      padding: 20px;
-    }
+.menu span{
+  margin:0 15px;
+  cursor:pointer;
+  opacity:0.8;
+}
 
-    input {
-      padding: 10px;
-      margin: 5px;
-      border-radius: 20px;
-      border: none;
-      width: 70%;
-    }
+.menu span:hover{
+  color:#b7ff00;
+}
 
-    button {
-      padding: 10px 15px;
-      margin: 5px;
-      background: #1DB954;
-      border: none;
-      color: white;
-      border-radius: 20px;
-      cursor: pointer;
-    }
+/* SECCIONES */
+.section{display:none;padding:40px;}
+.active{display:block;}
 
-    button:hover {
-      background: #17a44b;
-    }
+/* HERO */
+.hero{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:60px;
+}
 
-    .card {
-      background: #181818;
-      border-radius: 15px;
-      padding: 15px;
-      margin: 15px 0;
-      transition: 0.3s;
-    }
+.hero-text h1{
+  font-size:60px;
+  margin:0;
+}
 
-    .card:hover {
-      background: #282828;
-    }
+.hero-text span{
+  color:#b7ff00;
+  text-shadow:0 0 20px #b7ff00;
+}
 
-    .title {
-      font-size: 18px;
-      color: #1DB954;
-    }
+.hero button{
+  margin-top:20px;
+  padding:15px 25px;
+  border:none;
+  border-radius:30px;
+  background:#b7ff00;
+  cursor:pointer;
+  font-weight:bold;
+}
 
-    .user {
-      font-size: 12px;
-      opacity: 0.7;
-    }
+/* CIRCULO NEON */
+.circle{
+  width:300px;
+  height:300px;
+  border-radius:50%;
+  background: radial-gradient(circle, #ff00ff, #5a00ff);
+  box-shadow:0 0 80px #ff00ff;
+  animation: glow 2s infinite alternate;
+}
 
-    audio {
-      width: 100%;
-      margin-top: 10px;
-    }
+@keyframes glow{
+  from{ box-shadow:0 0 40px #ff00ff; }
+  to{ box-shadow:0 0 100px #ff00ff; }
+}
 
-    .comments {
-      background: #000;
-      padding: 10px;
-      border-radius: 10px;
-      margin-top: 10px;
-    }
+/* CARDS */
+.card{
+  background:#1a1a1a;
+  margin:20px 0;
+  padding:20px;
+  border-radius:15px;
+  transition:0.3s;
+}
 
-    .chat-box {
-      background: #000;
-      padding: 10px;
-      border-radius: 10px;
-      height: 150px;
-      overflow-y: auto;
-    }
-  </style>
+.card:hover{
+  transform:scale(1.02);
+  background:#222;
+}
+
+.card h3{
+  color:#b7ff00;
+}
+
+audio{
+  width:100%;
+  margin-top:10px;
+}
+
+/* INPUT */
+input{
+  padding:10px;
+  margin:5px;
+  border-radius:20px;
+  border:none;
+}
+button{
+  padding:10px 15px;
+  border:none;
+  border-radius:20px;
+  background:#b7ff00;
+  cursor:pointer;
+}
+</style>
 </head>
 
 <body>
 
-<div class="header">🎧 Entre Estudiantes</div>
+<!-- NAV -->
+<div class="nav">
+  <div>🎧 Entre Estudiantes</div>
+  <div class="menu">
+    <span onclick="show('inicio')">Inicio</span>
+    <span onclick="show('episodios')">Episodios</span>
+    <span onclick="show('nosotros')">Nosotros</span>
+    <span onclick="show('comunidad')">Comunidad</span>
+  </div>
+  <button onclick="login()">Login</button>
+</div>
 
-<div class="container">
+<!-- INICIO -->
+<div id="inicio" class="section active">
+  <div class="hero">
+    <div class="hero-text">
+      <h1>ENTRE <span>ESTUDIANTES</span></h1>
+      <p>Tu voz. Tu historia. Tu podcast.</p>
+      <button onclick="show('episodios')">Escuchar ahora</button>
+    </div>
+    <div class="circle"></div>
+  </div>
+</div>
 
-  <button onclick="login()">Iniciar sesión</button>
-  <div id="userInfo"></div>
-
-  <h2>Agregar episodio</h2>
-  <input id="title" placeholder="Título del episodio"><br>
-  <input id="audioURL" placeholder="Link .mp3"><br>
-  <button onclick="addPodcast()">Agregar</button>
-
+<!-- EPISODIOS -->
+<div id="episodios" class="section">
   <h2>Episodios</h2>
+
+  <div id="adminPanel" style="display:none;">
+    <input id="title" placeholder="Título"><br>
+    <input id="audioURL" placeholder="Link .mp3"><br>
+    <button onclick="addPodcast()">Subir episodio</button>
+  </div>
+
   <div id="podcasts"></div>
+</div>
 
-  <h2>Chat</h2>
-  <div class="chat-box" id="chatBox"></div>
-  <input id="chatInput">
-  <button onclick="sendMessage()">Enviar</button>
+<!-- NOSOTROS -->
+<div id="nosotros" class="section">
+  <h2>¿Quiénes somos?</h2>
+  <p>
+  Somos estudiantes de medicina que creamos este espacio para compartir
+  experiencias reales, aprendizajes y crecimiento personal.
+  </p>
+</div>
 
+<!-- COMUNIDAD -->
+<div id="comunidad" class="section">
+  <h2>Comunidad</h2>
+  <p>Espacio para compartir ideas y experiencias.</p>
 </div>
 
 <script>
+const ADMIN_EMAIL = "jorgeivanmorenor@gmail.com";
+
 const firebaseConfig = {
   apiKey: "AIzaSyDz5tYhKP1gX2UToItY0VarGLCJLoffjbg",
   authDomain: "entre-estudiantes.firebaseapp.com",
@@ -132,21 +190,28 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-auth.onAuthStateChanged(user => {
-  document.getElementById("userInfo").innerText =
-    user ? "Usuario: " + user.displayName : "";
-});
-
-function login() {
+function login(){
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithPopup(provider);
 }
 
-function addPodcast() {
+auth.onAuthStateChanged(user=>{
+  if(user && user.email === ADMIN_EMAIL){
+    document.getElementById("adminPanel").style.display="block";
+  }
+});
+
+function addPodcast(){
+  const user = auth.currentUser;
+  if(!user || user.email !== ADMIN_EMAIL){
+    alert("No autorizado");
+    return;
+  }
+
   const title = document.getElementById("title").value;
   const url = document.getElementById("audioURL").value;
 
-  if (!url.endsWith(".mp3")) {
+  if(!url.endsWith(".mp3")){
     alert("Debe ser .mp3");
     return;
   }
@@ -154,23 +219,25 @@ function addPodcast() {
   db.collection("podcasts").add({
     title,
     url,
+    date: new Date().toLocaleDateString(),
     time: Date.now()
   });
 }
 
 db.collection("podcasts").orderBy("time","desc")
-.onSnapshot(snapshot => {
-  const container = document.getElementById("podcasts");
-  container.innerHTML = "";
+.onSnapshot(snapshot=>{
+  const container=document.getElementById("podcasts");
+  container.innerHTML="";
 
-  snapshot.forEach(doc => {
-    const data = doc.data();
+  snapshot.forEach(doc=>{
+    const data=doc.data();
 
-    const div = document.createElement("div");
-    div.className = "card";
+    const div=document.createElement("div");
+    div.className="card";
 
-    div.innerHTML = `
-      <div class="title">${data.title}</div>
+    div.innerHTML=`
+      <h3>${data.title}</h3>
+      <small>${data.date}</small>
       <audio controls src="${data.url}"></audio>
     `;
 
@@ -178,28 +245,10 @@ db.collection("podcasts").orderBy("time","desc")
   });
 });
 
-function sendMessage() {
-  const text = document.getElementById("chatInput").value;
-
-  db.collection("chat").add({
-    text,
-    time: Date.now()
-  });
-
-  document.getElementById("chatInput").value = "";
+function show(section){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(section).classList.add("active");
 }
-
-db.collection("chat").orderBy("time")
-.onSnapshot(snapshot => {
-  const box = document.getElementById("chatBox");
-  box.innerHTML = "";
-
-  snapshot.forEach(doc => {
-    const p = document.createElement("p");
-    p.textContent = doc.data().text;
-    box.appendChild(p);
-  });
-});
 </script>
 
 </body>
