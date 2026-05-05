@@ -9,45 +9,9 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
 <style>
-  /* ===== CURSOR GLOW ===== */
-.cursor-glow{
-  position:fixed;
-  width:200px;
-  height:200px;
-  border-radius:50%;
-  pointer-events:none;
-  background:radial-gradient(circle, rgba(183,255,0,0.15), transparent 70%);
-  transform:translate(-50%,-50%);
-  z-index:0;
-}
-
-/* ===== CARDS 3D PRO ===== */
-.card{
-  transform-style:preserve-3d;
-  transition:transform .15s ease, box-shadow .2s ease;
-}
-
-.card:hover{
-  box-shadow:0 30px 60px rgba(0,0,0,0.6);
-}
-
-/* ===== ORB FLOAT ===== */
-@keyframes float{
-  0%{transform:translateY(0)}
-  50%{transform:translateY(-20px)}
-  100%{transform:translateY(0)}
-}
-
-.orb{
-  animation:float 6s ease-in-out infinite;
-}
-
-/* ===== HERO PARALLAX ===== */
-.hero{
-  perspective:1000px;
-}
 
 /* ===== BASE ORIGINAL ===== */
+*{box-sizing:border-box}
 body{
   margin:0;
   font-family:system-ui;
@@ -56,7 +20,7 @@ body{
   overflow-x:hidden;
 }
 
-/* ===== NUEVO: PARTICULAS ===== */
+/* ===== PARTICLES ===== */
 #particles{
   position:fixed;
   width:100%;
@@ -64,7 +28,7 @@ body{
   z-index:-1;
 }
 
-/* ===== NUEVO: GLOW ===== */
+/* ===== GLOW ===== */
 .cursor-glow{
   position:fixed;
   width:200px;
@@ -79,25 +43,22 @@ body{
   display:flex;
   justify-content:space-between;
   padding:20px;
-  background:rgba(0,0,0,0.5);
+  background:rgba(0,0,0,0.6);
 }
 
 /* ===== SECCIONES ===== */
-.section{
-  display:none;
-  padding:50px;
-}
-.section.active{
-  display:block;
-}
+.section{display:none;padding:50px}
+.section.active{display:block}
 
 /* ===== HERO ===== */
-.hero h1{
-  font-size:80px;
+.hero{
+  display:flex;
+  justify-content:space-between;
+  perspective:1000px;
 }
-.hero span{
-  color:#b7ff00;
-}
+.hero-left{transform:translateZ(40px)}
+.hero h1{font-size:80px}
+.hero span{color:#b7ff00}
 
 /* ===== GRID ===== */
 .grid{
@@ -106,7 +67,7 @@ body{
   gap:20px;
 }
 
-/* ===== CARDS (CON IMAGEN + DESC) ===== */
+/* ===== CARDS ===== */
 .card{
   background:#111;
   border-radius:15px;
@@ -114,36 +75,29 @@ body{
   transform-style:preserve-3d;
   transition:.2s;
 }
+.card:hover{box-shadow:0 30px 60px black}
 
 .card img{
   width:100%;
-  height:150px;
+  height:160px;
   object-fit:cover;
 }
 
-.card .info{
-  padding:10px;
-}
-
-.card h4{
-  color:#b7ff00;
-}
-
-.card p{
-  font-size:14px;
-  opacity:.8;
-}
+.card .meta{padding:10px}
+.card h4{color:#b7ff00}
+.card p{font-size:14px;opacity:.8}
 
 /* ===== PLAYER ===== */
 .player{
   position:fixed;
   bottom:0;
   width:100%;
-  background:rgba(0,0,0,0.6);
+  background:rgba(0,0,0,0.7);
 }
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:768px){
+  .hero{flex-direction:column;text-align:center}
   .hero h1{font-size:40px}
 }
 
@@ -151,57 +105,52 @@ body{
 </head>
 
 <body>
-  <canvas id="particles"></canvas>
-<div class="cursor-glow"></div>
 
-<!-- NUEVO -->
 <canvas id="particles"></canvas>
 <div class="cursor-glow"></div>
 
 <div class="nav">
   <div>🎧 Entre Estudiantes</div>
   <div>
-    <span onclick="showSection('inicio')">Inicio</span>
-    <span onclick="showSection('episodios')">Episodios</span>
-    <span onclick="showSection('subir')">Subir</span>
-    <span onclick="showSection('nosotros')">Nosotros</span>
+    <span onclick="show('inicio')">Inicio</span>
+    <span onclick="show('episodios')">Episodios</span>
+    <span onclick="show('subir')">Subir</span>
+    <span onclick="show('nosotros')">Nosotros</span>
   </div>
 </div>
 
-<!-- INICIO -->
 <section id="inicio" class="section active">
   <div class="hero">
-    <h1>ENTRE <span>ESTUDIANTES</span></h1>
+    <div class="hero-left">
+      <h1>ENTRE <span>ESTUDIANTES</span></h1>
+      <p>Tu voz. Tu historia.</p>
+    </div>
   </div>
 </section>
 
-<!-- EPISODIOS -->
 <section id="episodios" class="section">
   <h2>Episodios</h2>
   <div id="podcasts" class="grid"></div>
 </section>
 
-<!-- SUBIR -->
 <section id="subir" class="section">
   <h2>Subir</h2>
-  <input id="title" placeholder="Título"><br>
-  <input id="audioURL" placeholder="MP3"><br>
-  <input id="imageURL" placeholder="Imagen"><br>
-  <input id="desc" placeholder="Descripción"><br>
+  <input id="title"><br>
+  <input id="audioURL"><br>
+  <input id="imageURL"><br>
+  <input id="desc"><br>
   <button onclick="addPodcast()">Subir</button>
 </section>
 
-<!-- NOSOTROS (NO SE TOCA) -->
 <section id="nosotros" class="section">
   <h2>Nosotros</h2>
-
-  <p>Somos estudiantes de medicina de tercer semestre...</p>
+  <p>Somos estudiantes de medicina...</p>
 
   <h3>Misión</h3>
-  <p>Crear un espacio de apoyo académico y emocional.</p>
+  <p>Crear un espacio de apoyo académico.</p>
 
   <h3>Visión</h3>
-  <p>Ser un referente en educación médica.</p>
+  <p>Ser referencia en educación médica.</p>
 </section>
 
 <div class="player">
@@ -219,7 +168,7 @@ firebase.initializeApp({
 const db=firebase.firestore();
 
 /* ===== NAV ===== */
-function showSection(id){
+function show(id){
  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
  document.getElementById(id).classList.add('active');
 }
@@ -234,29 +183,50 @@ document.addEventListener("mousemove",e=>{
 /* ===== PARTICULAS ===== */
 const canvas=document.getElementById("particles");
 const ctx=canvas.getContext("2d");
-canvas.width=window.innerWidth;
-canvas.height=window.innerHeight;
+
+canvas.width=innerWidth;
+canvas.height=innerHeight;
 
 let particles=[];
-for(let i=0;i<60;i++){
+for(let i=0;i<80;i++){
  particles.push({
   x:Math.random()*canvas.width,
   y:Math.random()*canvas.height,
-  dx:0.3, dy:0.3
+  dx:(Math.random()-0.5)*0.5,
+  dy:(Math.random()-0.5)*0.5
  });
 }
 
-function animate(){
+function draw(){
  ctx.clearRect(0,0,canvas.width,canvas.height);
+
  particles.forEach(p=>{
   p.x+=p.dx;
   p.y+=p.dy;
+
+  ctx.beginPath();
+  ctx.arc(p.x,p.y,2,0,Math.PI*2);
   ctx.fillStyle="#b7ff00";
-  ctx.fillRect(p.x,p.y,2,2);
+  ctx.fill();
  });
- requestAnimationFrame(animate);
+
+ requestAnimationFrame(draw);
 }
-animate();
+draw();
+
+/* ===== CARDS 3D ===== */
+document.addEventListener("mousemove",e=>{
+ document.querySelectorAll(".card").forEach(card=>{
+  const r=card.getBoundingClientRect();
+  const x=e.clientX-r.left;
+  const y=e.clientY-r.top;
+
+  const rx=-(y-r.height/2)/25;
+  const ry=(x-r.width/2)/25;
+
+  card.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg)`;
+ });
+});
 
 /* ===== SUBIR ===== */
 function addPodcast(){
@@ -269,7 +239,7 @@ function addPodcast(){
  });
 }
 
-/* ===== LISTAR (CON IMAGEN + DESC) ===== */
+/* ===== LISTAR ===== */
 db.collection("podcasts").orderBy("time","desc")
 .onSnapshot(snap=>{
  podcasts.innerHTML="";
@@ -278,10 +248,10 @@ db.collection("podcasts").orderBy("time","desc")
 
   podcasts.innerHTML+=`
   <div class="card" onclick="play('${d.url}')">
-    <img src="${d.image}">
-    <div class="info">
+    <img src="${d.image || ''}">
+    <div class="meta">
       <h4>${d.title}</h4>
-      <p>${d.desc}</p>
+      <p>${d.desc || ''}</p>
     </div>
   </div>`;
  });
@@ -293,64 +263,7 @@ function play(url){
  a.src=url;
  a.play();
 }
-/* ===== CURSOR GLOW ===== */
-const glow = document.querySelector(".cursor-glow");
 
-document.addEventListener("mousemove", e=>{
-  glow.style.left = e.clientX + "px";
-  glow.style.top  = e.clientY + "px";
-});
-
-/* ===== PARTICULAS ===== */
-const canvas = document.getElementById("particles");
-const ctx = canvas.getContext("2d");
-
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let particles = [];
-
-for(let i=0;i<80;i++){
-  particles.push({
-    x:Math.random()*canvas.width,
-    y:Math.random()*canvas.height,
-    r:2,
-    dx:(Math.random()-0.5)*0.5,
-    dy:(Math.random()-0.5)*0.5
-  });
-}
-
-function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-
-  particles.forEach(p=>{
-    p.x+=p.dx;
-    p.y+=p.dy;
-
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fillStyle="#b7ff00";
-    ctx.fill();
-  });
-
-  requestAnimationFrame(animate);
-}
-
-animate();
-
-/* ===== CARDS 3D ===== */
-document.addEventListener("mousemove", e=>{
-  document.querySelectorAll(".card").forEach(card=>{
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const rx = -(y - rect.height/2)/25;
-    const ry = (x - rect.width/2)/25;
-
-    card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
-  });
-});
 </script>
 
 </body>
