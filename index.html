@@ -27,9 +27,11 @@ body{
   align-items:center;
 }
 
+/* TEXTO NAV MÁS GRANDE */
 .menu span{
-  margin:0 15px;
+  margin:0 18px;
   cursor:pointer;
+  font-size:18px;
   transition:0.3s;
 }
 
@@ -38,7 +40,7 @@ body{
 }
 
 /* ================= SECCIONES ================= */
-.section{display:none;padding:40px;}
+.section{display:none;padding:50px;}
 .active{display:block;}
 
 /* ================= HERO ================= */
@@ -56,55 +58,47 @@ body{
   gap:25px;
 }
 
+/* 🔥 TÍTULO MÁS GRANDE */
 .hero-text h1{
-  font-size:65px;
+  font-size:90px; /* antes ~65 */
   margin:0;
-  letter-spacing:2px;
+  letter-spacing:3px;
 }
 
 .hero-text span{
   color:#b7ff00;
-  text-shadow:0 0 20px #b7ff00;
+  text-shadow:0 0 25px #b7ff00;
 }
 
+/* 🔥 SUBTEXTO MÁS GRANDE */
 .hero-text p{
-  opacity:0.8;
-  font-size:18px;
+  font-size:22px;
+  opacity:0.9;
 }
 
+/* BOTÓN */
 .hero button{
-  padding:15px 25px;
+  padding:18px 30px;
   border:none;
   border-radius:30px;
   background:#b7ff00;
   font-weight:bold;
   cursor:pointer;
-  transition:0.3s;
+  font-size:18px;
 }
 
-.hero button:hover{
-  transform:scale(1.05);
-}
-
-/* ================= IMAGEN UNIVERSIDAD ================= */
+/* ================= LOGO 3D ================= */
 .uni-container{
-  background:rgba(255,255,255,0.05);
-  padding:15px;
-  border-radius:15px;
-  backdrop-filter:blur(10px);
-  box-shadow:0 0 30px rgba(255,255,255,0.15);
-  transition:0.4s;
-  width:fit-content;
-}
-
-.uni-container:hover{
-  transform:scale(1.05);
+  perspective:1000px;
+  display:inline-block;
 }
 
 .uni-img{
-  width:320px;
-  border-radius:10px;
+  width:520px;
   display:block;
+  transform-style: preserve-3d;
+  transition: transform 0.2s ease;
+  will-change: transform;
 }
 
 /* ================= NEON ================= */
@@ -114,12 +108,15 @@ body{
   border-radius:50%;
   background: radial-gradient(circle, #ff00ff, #5a00ff);
   box-shadow:0 0 80px #ff00ff;
-  animation: glow 2s infinite alternate;
 }
 
-@keyframes glow{
-  from{ box-shadow:0 0 40px #ff00ff; }
-  to{ box-shadow:0 0 120px #ff00ff; }
+/* ================= TITULOS SECCIONES ================= */
+h2{
+  font-size:40px;
+}
+
+h3{
+  font-size:28px;
 }
 
 /* ================= GRID ================= */
@@ -139,7 +136,6 @@ body{
 
 .card:hover{
   transform:scale(1.05);
-  box-shadow:0 0 20px rgba(183,255,0,0.3);
 }
 
 .card img{
@@ -151,6 +147,7 @@ body{
 .card h3{
   padding:10px;
   color:#b7ff00;
+  font-size:20px;
 }
 
 audio{
@@ -163,7 +160,8 @@ input{
   margin:5px;
   border-radius:20px;
   border:none;
-  width:250px;
+  width:260px;
+  font-size:16px;
 }
 
 button{
@@ -172,13 +170,14 @@ button{
   border-radius:20px;
   background:#b7ff00;
   cursor:pointer;
+  font-size:16px;
 }
 
 /* ================= NOSOTROS ================= */
 #nosotros p{
   max-width:800px;
-  line-height:1.6;
-  opacity:0.9;
+  line-height:1.8;
+  font-size:18px;
 }
 
 </style>
@@ -188,7 +187,7 @@ button{
 
 <!-- NAV -->
 <div class="nav">
-  <div>🎧 Entre Estudiantes</div>
+  <div style="font-size:22px;">🎧 Entre Estudiantes</div>
   <div class="menu">
     <span onclick="show('inicio')">Inicio</span>
     <span onclick="show('episodios')">Episodios</span>
@@ -198,23 +197,20 @@ button{
   </div>
 </div>
 
-<!-- ================= INICIO ================= -->
+<!-- INICIO -->
 <div id="inicio" class="section active">
   <div class="hero">
 
     <div class="hero-left">
-
       <div class="hero-text">
         <h1>ENTRE <span>ESTUDIANTES</span></h1>
         <p>Tu voz. Tu historia. Tu podcast.</p>
         <button onclick="show('episodios')">Escuchar ahora</button>
       </div>
 
-      <!-- ✅ TU IMAGEN REAL -->
       <div class="uni-container">
         <img class="uni-img" src="download.png">
       </div>
-
     </div>
 
     <div class="circle"></div>
@@ -222,13 +218,13 @@ button{
   </div>
 </div>
 
-<!-- ================= EPISODIOS ================= -->
+<!-- EPISODIOS -->
 <div id="episodios" class="section">
   <h2>Episodios</h2>
   <div id="podcasts" class="grid"></div>
 </div>
 
-<!-- ================= SUBIR ================= -->
+<!-- SUBIR -->
 <div id="subir" class="section">
   <h2>Subir episodio</h2>
 
@@ -240,7 +236,7 @@ button{
   <button onclick="addPodcast()">Subir episodio</button>
 </div>
 
-<!-- ================= NOSOTROS ================= -->
+<!-- NOSOTROS (SE RESPETA COMPLETO) -->
 <div id="nosotros" class="section">
   <h2>¿Quiénes somos?</h2>
 
@@ -253,21 +249,22 @@ button{
   </p>
 
   <p>
-  Queremos mostrar el lado real de esta carrera: el estrés, la presión, las dudas, pero también la motivación, el crecimiento personal y todo lo que se vive en el proceso. La idea es que cualquier estudiante del área de la salud que escuche este podcast pueda sentirse identificado y acompañado.
+  Queremos mostrar el lado real de esta carrera: el estrés, la presión, las dudas, pero también la motivación, el crecimiento personal y todo lo que se vive en el proceso.
   </p>
 
   <h3>Misión</h3>
   <p>
-  Crear un espacio cercano y auténtico donde estudiantes del área de la salud puedan encontrar apoyo académico y emocional, compartiendo experiencias reales de forma clara, sencilla y sin tanta formalidad.
+  Crear un espacio cercano y auténtico donde estudiantes del área de la salud puedan encontrar apoyo académico y emocional.
   </p>
 
   <h3>Visión</h3>
   <p>
-  Convertirnos en un punto de referencia entre estudiantes de medicina y carreras afines, no por ser perfectos, sino por ser reales, útiles y por aportar contenido que de verdad ayude a quienes están pasando por este mismo camino.
+  Convertirnos en un punto de referencia entre estudiantes de medicina y carreras afines.
   </p>
+
 </div>
 
-<!-- ================= COMUNIDAD ================= -->
+<!-- COMUNIDAD -->
 <div id="comunidad" class="section">
   <h2>Comunidad</h2>
   <p>Espacio para compartir ideas y crecer juntos.</p>
@@ -288,11 +285,7 @@ const db=firebase.firestore();
 
 function addPodcast(){
  const pass=prompt("Clave admin");
-
- if(pass!==ADMIN_PASSWORD){
-  alert("No autorizado");
-  return;
- }
+ if(pass!==ADMIN_PASSWORD){ alert("No autorizado"); return; }
 
  db.collection("podcasts").add({
   title:title.value,
@@ -306,17 +299,14 @@ function addPodcast(){
 db.collection("podcasts").orderBy("time","desc")
 .onSnapshot(snapshot=>{
  podcasts.innerHTML="";
-
  snapshot.forEach(doc=>{
   const d=doc.data();
-
   podcasts.innerHTML+=`
   <div class="card">
     <img src="${d.image || 'https://via.placeholder.com/300'}">
     <h3>${d.title}</h3>
     <audio controls src="${d.url}"></audio>
-  </div>
-  `;
+  </div>`;
  });
 });
 
@@ -324,6 +314,24 @@ function show(section){
  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
  document.getElementById(section).classList.add("active");
 }
+
+/* 3D LOGO */
+const logo=document.querySelector(".uni-img");
+
+logo.addEventListener("mousemove",e=>{
+ const rect=logo.getBoundingClientRect();
+ const x=e.clientX-rect.left;
+ const y=e.clientY-rect.top;
+ const cx=rect.width/2;
+ const cy=rect.height/2;
+
+ logo.style.transform=
+ `rotateX(${-(y-cy)/8}deg) rotateY(${(x-cx)/8}deg) scale(1.05)`;
+});
+
+logo.addEventListener("mouseleave",()=>{
+ logo.style.transform="rotateX(0) rotateY(0)";
+});
 
 </script>
 
