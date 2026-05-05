@@ -9,13 +9,6 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
 <style>
-
-/* ===== SCROLL SUAVE GLOBAL ===== */
-html{
-  scroll-behavior:smooth;
-}
-
-/* ===== GENERAL ===== */
 body{
   margin:0;
   font-family:Arial;
@@ -23,93 +16,64 @@ body{
   color:white;
 }
 
-/* ===== NAV ===== */
+/* NAV */
 .nav{
   display:flex;
   justify-content:space-between;
   padding:20px 40px;
-  background:black;
   align-items:center;
+  background:#000;
 }
 
 .menu span{
   margin:0 15px;
   cursor:pointer;
-  font-size:18px;
-  transition:0.3s;
 }
 
 .menu span:hover{
   color:#b7ff00;
 }
 
-/* ===== SECCIONES ===== */
-.section{
-  display:none;
-  padding:50px;
-  opacity:0;
-  transform:translateY(40px);
-  transition:all 0.6s ease;
-}
+/* SECCIONES */
+.section{display:none;padding:40px;}
+.active{display:block;}
 
-.active{
-  display:block;
-  opacity:1;
-  transform:translateY(0);
-}
-
-/* ===== HERO ===== */
+/* HERO */
 .hero{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:50px;
+  padding:60px;
 }
 
 .hero-text h1{
-  font-size:90px;
+  font-size:60px;
 }
 
 .hero-text span{
   color:#b7ff00;
-  text-shadow:0 0 25px #b7ff00;
 }
 
-.hero-text p{
-  font-size:22px;
-}
-
-/* ===== LOGO ===== */
-.uni-container{
-  perspective:1000px;
-}
-
-.uni-img{
-  width:520px;
-  transition: transform 0.2s;
-}
-
-/* ===== CÍRCULO ===== */
 .circle{
-  width:300px;
-  height:300px;
+  width:250px;
+  height:250px;
   border-radius:50%;
   background: radial-gradient(circle, #ff00ff, #5a00ff);
   box-shadow:0 0 80px #ff00ff;
 }
 
-/* ===== GRID ===== */
+/* GRID */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
-  gap:25px;
+  gap:20px;
 }
 
-/* ===== CARDS ===== */
 .card{
   background:#1a1a1a;
   border-radius:15px;
   overflow:hidden;
+  cursor:pointer;
   transition:0.3s;
 }
 
@@ -117,209 +81,197 @@ body{
   transform:scale(1.05);
 }
 
-/* ===== ANIMACIÓN SCROLL ===== */
-.fade-in{
-  opacity:0;
-  transform:translateY(50px);
-  transition:all 0.8s ease;
+.card img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
 }
 
-.fade-in.visible{
-  opacity:1;
-  transform:translateY(0);
+.card h3{
+  padding:10px;
+  color:#b7ff00;
 }
 
-/* ===== RESPONSIVE ===== */
-@media(max-width:768px){
-  .hero{
-    flex-direction:column;
-    text-align:center;
-  }
-
-  .hero-text h1{
-    font-size:45px;
-  }
-
-  .uni-img{
-    width:90%;
-  }
-
-  .grid{
-    grid-template-columns:1fr;
-  }
+/* PLAYER PAGE */
+.playerPage{
+  display:none;
+  padding:40px;
 }
 
+.playerBox{
+  max-width:900px;
+  margin:auto;
+}
+
+.playerBox img{
+  width:100%;
+  border-radius:10px;
+}
+
+audio{
+  width:100%;
+  margin-top:15px;
+}
+
+/* INPUTS */
+input{
+  padding:10px;
+  margin:5px;
+  border-radius:20px;
+  border:none;
+}
+
+button{
+  padding:10px 15px;
+  border:none;
+  border-radius:20px;
+  background:#b7ff00;
+  cursor:pointer;
+}
 </style>
 </head>
 
 <body>
 
+<!-- NAV -->
 <div class="nav">
-  <div style="font-size:22px;">🎧 Entre Estudiantes</div>
+  <div>🎧 Entre Estudiantes</div>
   <div class="menu">
     <span onclick="show('inicio')">Inicio</span>
     <span onclick="show('episodios')">Episodios</span>
-    <span onclick="show('subir')">Subir</span>
     <span onclick="show('nosotros')">Nosotros</span>
     <span onclick="show('comunidad')">Comunidad</span>
   </div>
 </div>
 
 <!-- INICIO -->
-<div id="inicio" class="section active fade-in">
+<div id="inicio" class="section active">
   <div class="hero">
-
-    <div>
+    <div class="hero-text">
       <h1>ENTRE <span>ESTUDIANTES</span></h1>
       <p>Tu voz. Tu historia. Tu podcast.</p>
-
-      <div class="uni-container">
-        <img class="uni-img" src="download.png">
-      </div>
+      <input id="username" placeholder="Tu nombre">
+      <br>
+      <button onclick="show('episodios')">Escuchar ahora</button>
     </div>
-
     <div class="circle"></div>
-
   </div>
 </div>
 
 <!-- EPISODIOS -->
-<div id="episodios" class="section fade-in">
+<div id="episodios" class="section">
   <h2>Episodios</h2>
+
+  <!-- ADMIN -->
+  <div>
+    <input id="title" placeholder="Título"><br>
+    <input id="audioURL" placeholder="Link .mp3"><br>
+    <input id="imageURL" placeholder="Imagen"><br>
+    <input id="desc" placeholder="Descripción"><br>
+    <button onclick="addPodcast()">Subir episodio</button>
+  </div>
+
   <div id="podcasts" class="grid"></div>
 </div>
 
-<!-- SUBIR -->
-<div id="subir" class="section fade-in">
-  <h2>Subir episodio</h2>
-
-  <!-- TÍTULO -->
-  <input id="title" placeholder="Título del episodio (ej: Exámenes y café)"><br>
-
-  <!-- AUDIO -->
-  <input id="audioURL" placeholder="Link del audio (.mp3 obligatorio)"><br>
-
-  <!-- IMAGEN -->
-  <input id="imageURL" placeholder="Imagen del episodio (link .jpg/.png)"><br>
-
-  <!-- DESCRIPCIÓN -->
-  <input id="desc" placeholder="Descripción corta del episodio"><br>
-
-  <button onclick="addPodcast()">Subir episodio</button>
-</div>
-
 <!-- NOSOTROS -->
-<div id="nosotros" class="section fade-in">
+<div id="nosotros" class="section">
   <h2>¿Quiénes somos?</h2>
-
-  <h3>Misión</h3>
-  <p>Crear un espacio cercano...</p>
-
-  <h3>Visión</h3>
-  <p>Ser un referente...</p>
+  <p>
+  Somos estudiantes de medicina que creamos este espacio para compartir experiencias,
+  aprendizajes y conversaciones reales.
+  </p>
 </div>
 
 <!-- COMUNIDAD -->
-<div id="comunidad" class="section fade-in">
+<div id="comunidad" class="section">
   <h2>Comunidad</h2>
+  <p>
+  Espacio para conectar, compartir ideas y crecer juntos como estudiantes.
+  </p>
+</div>
+
+<!-- PLAYER -->
+<div id="playerPage" class="playerPage">
+  <button onclick="volver()">⬅ Volver</button>
+
+  <div class="playerBox">
+    <img id="playerImg">
+    <h2 id="playerTitle"></h2>
+    <p id="playerDesc"></p>
+    <audio id="audioPlayer" controls></audio>
+  </div>
 </div>
 
 <script>
+const ADMIN_PASSWORD = "12345admin";
 
-/* ===== FIREBASE ===== */
-const firebaseConfig={apiKey:"AIza..."};
+const firebaseConfig = {
+  apiKey: "AIzaSyDz5tYhKP1gX2UToItY0VarGLCJLoffjbg",
+  authDomain: "entre-estudiantes.firebaseapp.com",
+  projectId: "entre-estudiantes"
+};
+
 firebase.initializeApp(firebaseConfig);
-const db=firebase.firestore();
+const db = firebase.firestore();
 
-/* ===== CAMBIO DE SECCIÓN ===== */
-function show(section){
- document.querySelectorAll(".section").forEach(s=>{
-  s.classList.remove("active");
- });
-
- setTimeout(()=>{
-  document.getElementById(section).classList.add("active");
- },150);
-}
-
-/* ===== EFECTO 3D ===== */
-const logo=document.querySelector(".uni-img");
-
-logo.addEventListener("mousemove",e=>{
- const rect=logo.getBoundingClientRect();
- const x=e.clientX-rect.left;
- const y=e.clientY-rect.top;
- const cx=rect.width/2;
- const cy=rect.height/2;
-
- logo.style.transform=
- `rotateX(${-(y-cy)/8}deg) rotateY(${(x-cx)/8}deg) scale(1.05)`;
-});
-
-logo.addEventListener("mouseleave",()=>{
- logo.style.transform="rotateX(0) rotateY(0)";
-});
-
-/* ===== SCROLL ANIMADO ===== */
-const observer=new IntersectionObserver(entries=>{
- entries.forEach(entry=>{
-  if(entry.isIntersecting){
-    entry.target.classList.add("visible");
-  }
- });
-});
-
-document.querySelectorAll(".fade-in").forEach(el=>{
- observer.observe(el);
-});
-
+/* SUBIR */
 function addPodcast(){
+  const pass = prompt("Clave admin");
 
-  const title = document.getElementById("title").value;
-  const url   = document.getElementById("audioURL").value;
-  const image = document.getElementById("imageURL").value;
-  const desc  = document.getElementById("desc").value;
-
-  if(!url.endsWith(".mp3")){
-    alert("El audio debe ser .mp3");
+  if(pass !== ADMIN_PASSWORD){
+    alert("No autorizado");
     return;
   }
 
   db.collection("podcasts").add({
-    title,
-    url,
-    image,
-    desc,
-    date: new Date().toLocaleDateString(),
-    time: Date.now()
+    title:title.value,
+    url:audioURL.value,
+    image:imageURL.value,
+    desc:desc.value,
+    time:Date.now()
   });
 }
-  db.collection("podcasts").orderBy("time","desc")
-.onSnapshot(snapshot=>{
 
-  const container = document.getElementById("podcasts");
-  container.innerHTML = "";
+/* MOSTRAR */
+db.collection("podcasts").orderBy("time","desc")
+.onSnapshot(snapshot=>{
+  podcasts.innerHTML="";
 
   snapshot.forEach(doc=>{
     const d = doc.data();
 
-    container.innerHTML += `
-      <div class="card">
-
-        <img src="${d.image || 'https://via.placeholder.com/400x200'}" style="width:100%;height:150px;object-fit:cover;">
-
-        <div style="padding:10px">
-          <h3 style="color:#b7ff00">${d.title || ''}</h3>
-          <p style="font-size:14px;opacity:0.8">${d.desc || ''}</p>
-
-          <audio controls style="width:100%;margin-top:10px;" src="${d.url}"></audio>
-        </div>
-
-      </div>
+    podcasts.innerHTML += `
+    <div class="card" onclick="openPlayer('${d.url}','${d.title}','${d.image}','${d.desc}')">
+      <img src="${d.image || 'https://via.placeholder.com/300'}">
+      <h3>${d.title}</h3>
+    </div>
     `;
   });
-
 });
+
+/* PLAYER */
+function openPlayer(url,title,img,desc){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById("playerPage").style.display="block";
+
+  audioPlayer.src=url;
+  playerTitle.innerText=title;
+  playerImg.src=img;
+  playerDesc.innerText=desc;
+}
+
+function volver(){
+  document.getElementById("playerPage").style.display="none";
+  show("episodios");
+  audioPlayer.pause();
+}
+
+/* NAV */
+function show(section){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById(section).classList.add("active");
+}
 </script>
 
 </body>
