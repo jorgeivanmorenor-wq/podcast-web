@@ -6,7 +6,6 @@
 <title>Entre Estudiantes</title>
 
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
 <style>
@@ -133,7 +132,6 @@ button{
     <span onclick="show('nosotros')">Nosotros</span>
     <span onclick="show('comunidad')">Comunidad</span>
   </div>
-  <button onclick="login()">Login</button>
 </div>
 
 <!-- INICIO -->
@@ -142,6 +140,7 @@ button{
     <div class="hero-text">
       <h1>ENTRE <span>ESTUDIANTES</span></h1>
       <p>Tu voz. Tu historia. Tu podcast.</p>
+      <input id="username" placeholder="Tu nombre"><br>
       <button onclick="show('episodios')">Escuchar ahora</button>
     </div>
     <div class="circle"></div>
@@ -152,7 +151,8 @@ button{
 <div id="episodios" class="section">
   <h2>Episodios</h2>
 
-  <div id="adminPanel" style="display:none;">
+  <!-- PANEL ADMIN -->
+  <div>
     <input id="title" placeholder="Título"><br>
     <input id="audioURL" placeholder="Link .mp3"><br>
     <button onclick="addPodcast()">Subir episodio</button>
@@ -177,7 +177,7 @@ button{
 </div>
 
 <script>
-const ADMIN_EMAIL = "jorgeivanmorenor@gmail.com";
+const ADMIN_PASSWORD = "12345admin"; // CAMBIA ESTA CLAVE
 
 const firebaseConfig = {
   apiKey: "AIzaSyDz5tYhKP1gX2UToItY0VarGLCJLoffjbg",
@@ -186,24 +186,12 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-
-const auth = firebase.auth();
 const db = firebase.firestore();
 
-function login(){
-  const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider);
-}
-
-auth.onAuthStateChanged(user=>{
-  if(user && user.email === ADMIN_EMAIL){
-    document.getElementById("adminPanel").style.display="block";
-  }
-});
-
 function addPodcast(){
-  const user = auth.currentUser;
-  if(!user || user.email !== ADMIN_EMAIL){
+  const password = prompt("Clave de administrador:");
+
+  if(password !== ADMIN_PASSWORD){
     alert("No autorizado");
     return;
   }
