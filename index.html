@@ -10,17 +10,17 @@
 
 <style>
 
-/* ===== FONDO ANIMADO ===== */
+/* ===== FONDO ANIMADO PRO ===== */
 body{
   margin:0;
   font-family:Arial;
   color:white;
-  background: linear-gradient(-45deg, #000, #1a0033, #020617, #000);
+  background: linear-gradient(-45deg,#000,#1a0033,#020617,#000);
   background-size:400% 400%;
-  animation:fondo 10s ease infinite;
+  animation:bg 12s ease infinite;
 }
 
-@keyframes fondo{
+@keyframes bg{
   0%{background-position:0% 50%;}
   50%{background-position:100% 50%;}
   100%{background-position:0% 50%;}
@@ -35,14 +35,15 @@ body{
   backdrop-filter:blur(10px);
 }
 
-/* ===== MENÚ ===== */
 .nav span{
   margin:0 10px;
   cursor:pointer;
+  transition:.3s;
 }
 
 .nav span:hover{
   color:#b7ff00;
+  transform:translateY(-2px);
 }
 
 /* ===== SECCIONES ===== */
@@ -50,14 +51,14 @@ body{
   display:none;
   padding:50px;
   opacity:0;
-  transform:translateY(30px);
-  transition:.5s;
+  transform:translateY(40px) scale(0.98);
+  transition:all .6s ease;
 }
 
 .active{
   display:block;
   opacity:1;
-  transform:translateY(0);
+  transform:translateY(0) scale(1);
 }
 
 /* ===== HERO ===== */
@@ -69,6 +70,7 @@ body{
 
 .hero h1{
   font-size:80px;
+  animation:fadeUp 1s ease;
 }
 
 .hero span{
@@ -76,23 +78,48 @@ body{
   text-shadow:0 0 20px #b7ff00;
 }
 
-/* ===== TARJETAS ===== */
+/* ===== ANIMACIONES ===== */
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(40px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+/* ===== GRID ===== */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
   gap:20px;
 }
 
+/* ===== CARDS PRO ===== */
 .card{
   background:#1a1a1a;
   padding:15px;
-  border-radius:10px;
-  transition:.3s;
+  border-radius:15px;
+  transition:.4s;
+  position:relative;
+  overflow:hidden;
 }
 
+/* brillo animado */
+.card::before{
+  content:"";
+  position:absolute;
+  width:100%;
+  height:100%;
+  background:linear-gradient(120deg,transparent,#b7ff00,transparent);
+  opacity:0;
+  transition:.5s;
+}
+
+/* hover pro */
 .card:hover{
-  transform:scale(1.05);
-  box-shadow:0 0 20px #b7ff00;
+  transform:translateY(-10px) scale(1.03);
+  box-shadow:0 20px 40px rgba(0,0,0,0.6);
+}
+
+.card:hover::before{
+  opacity:0.2;
 }
 
 /* ===== BOTONES ===== */
@@ -102,6 +129,12 @@ button{
   border-radius:20px;
   background:#b7ff00;
   cursor:pointer;
+  transition:.3s;
+}
+
+button:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 15px #b7ff00;
 }
 
 /* ===== INPUT ===== */
@@ -119,10 +152,7 @@ input{
   background:#0f172a;
   border-radius:15px;
   display:none;
-}
-
-.study-box h3{
-  color:#b7ff00;
+  animation:fadeUp .5s ease;
 }
 
 .question{
@@ -132,15 +162,22 @@ input{
   border-radius:10px;
 }
 
+/* ===== SCROLL ANIMATION ===== */
+.fade{
+  opacity:0;
+  transform:translateY(40px);
+  transition:1s;
+}
+
+.fade.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
 /* ===== RESPONSIVE ===== */
 @media(max-width:768px){
-  .hero{
-    flex-direction:column;
-    text-align:center;
-  }
-  .hero h1{
-    font-size:40px;
-  }
+  .hero{flex-direction:column;text-align:center;}
+  .hero h1{font-size:40px;}
 }
 
 </style>
@@ -159,7 +196,7 @@ input{
 </div>
 
 <!-- INICIO -->
-<div id="inicio" class="section active">
+<div id="inicio" class="section active fade">
   <div class="hero">
     <div>
       <h1>ENTRE <span>ESTUDIANTES</span></h1>
@@ -169,7 +206,7 @@ input{
 </div>
 
 <!-- EPISODIOS -->
-<div id="episodios" class="section">
+<div id="episodios" class="section fade">
   <h2>Episodios</h2>
 
   <div id="podcasts" class="grid"></div>
@@ -190,7 +227,7 @@ input{
 </div>
 
 <!-- SUBIR -->
-<div id="subir" class="section">
+<div id="subir" class="section fade">
   <h2>Subir episodio</h2>
 
   <input id="title" placeholder="Título"><br>
@@ -200,22 +237,18 @@ input{
 </div>
 
 <!-- NOSOTROS -->
-<div id="nosotros" class="section">
+<div id="nosotros" class="section fade">
   <h2>¿Quiénes somos?</h2>
 
   <p>
-  Somos estudiantes de medicina de tercer semestre que desarrollamos este podcast como parte de la asignatura de emprendimiento.
+  Somos estudiantes de medicina de tercer semestre...
   </p>
 
   <h3>Misión</h3>
-  <p>
-  Brindar apoyo académico y motivacional a estudiantes del área de la salud mediante contenido real.
-  </p>
+  <p>Brindar apoyo académico y motivacional.</p>
 
   <h3>Visión</h3>
-  <p>
-  Ser una referencia estudiantil en educación médica digital.
-  </p>
+  <p>Ser referencia en educación médica digital.</p>
 </div>
 
 <script>
@@ -229,10 +262,10 @@ firebase.initializeApp({
 
 const db=firebase.firestore();
 
-/* ===== NAVEGACIÓN ===== */
+/* ===== CAMBIO SECCIÓN ===== */
 function show(section){
  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
- setTimeout(()=>document.getElementById(section).classList.add("active"),150);
+ setTimeout(()=>document.getElementById(section).classList.add("active"),200);
 }
 
 /* ===== SUBIR ===== */
@@ -252,38 +285,55 @@ db.collection("podcasts").orderBy("time","desc")
   const d=doc.data();
 
   podcasts.innerHTML+=`
-  <div class="card">
+  <div class="card fade">
     <h3>${d.title}</h3>
     <audio controls src="${d.url}"></audio>
     <br><br>
     <button onclick="openStudy('${d.title}')">Modo estudio</button>
   </div>`;
  });
+
+ activateScroll();
 });
 
 /* ===== MODO ESTUDIO ===== */
 function openStudy(title){
-
  document.getElementById("studyMode").style.display="block";
 
- document.getElementById("summary").innerText=
- "Este episodio explica: " + title;
+ summary.innerText="Este episodio trata sobre: "+title;
 
- document.getElementById("concepts").innerHTML=`
-  <li>Definición del tema</li>
+ concepts.innerHTML=`
+  <li>Definición</li>
   <li>Aplicación clínica</li>
-  <li>Importancia médica</li>
+  <li>Importancia</li>
  `;
 
- document.getElementById("questions").innerHTML=`
+ questions.innerHTML=`
   <div class="question">¿Qué es ${title}?</div>
   <div class="question">Explique su importancia</div>
  `;
 }
 
 function closeStudy(){
- document.getElementById("studyMode").style.display="none";
+ studyMode.style.display="none";
 }
+
+/* ===== SCROLL ANIMADO ===== */
+function activateScroll(){
+ const elements=document.querySelectorAll(".fade");
+
+ const observer=new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add("show");
+    }
+  });
+ });
+
+ elements.forEach(el=>observer.observe(el));
+}
+
+activateScroll();
 
 </script>
 
