@@ -192,9 +192,20 @@ body{
 <!-- SUBIR -->
 <div id="subir" class="section fade-in">
   <h2>Subir episodio</h2>
-  <input id="title"><br>
-  <input id="audioURL"><br>
-  <button onclick="addPodcast()">Subir</button>
+
+  <!-- TÍTULO -->
+  <input id="title" placeholder="Título del episodio (ej: Exámenes y café)"><br>
+
+  <!-- AUDIO -->
+  <input id="audioURL" placeholder="Link del audio (.mp3 obligatorio)"><br>
+
+  <!-- IMAGEN -->
+  <input id="imageURL" placeholder="Imagen del episodio (link .jpg/.png)"><br>
+
+  <!-- DESCRIPCIÓN -->
+  <input id="desc" placeholder="Descripción corta del episodio"><br>
+
+  <button onclick="addPodcast()">Subir episodio</button>
 </div>
 
 <!-- NOSOTROS -->
@@ -262,6 +273,27 @@ document.querySelectorAll(".fade-in").forEach(el=>{
  observer.observe(el);
 });
 
+  function addPodcast(){
+
+  const title = document.getElementById("title").value;
+  const url   = document.getElementById("audioURL").value;
+  const image = document.getElementById("imageURL").value;
+  const desc  = document.getElementById("desc").value;
+
+  if(!url.endsWith(".mp3")){
+    alert("El audio debe ser .mp3");
+    return;
+  }
+
+  db.collection("podcasts").add({
+    title,
+    url,
+    image,
+    desc,
+    date: new Date().toLocaleDateString(),
+    time: Date.now()
+  });
+}
 </script>
 
 </body>
