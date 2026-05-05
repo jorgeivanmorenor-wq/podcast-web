@@ -9,26 +9,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
 <style>
-
-/* ===== RESET ===== */
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:system-ui;
-  color:white;
-  background:linear-gradient(135deg,#000,#0b1220,#020617);
-  overflow-x:hidden;
-}
-
-/* ===== PARTICLES ===== */
-#particles{
-  position:fixed;
-  width:100%;
-  height:100%;
-  z-index:-1;
-}
-
-/* ===== CURSOR GLOW ===== */
+  /* ===== CURSOR GLOW ===== */
 .cursor-glow{
   position:fixed;
   width:200px;
@@ -37,6 +18,60 @@ body{
   pointer-events:none;
   background:radial-gradient(circle, rgba(183,255,0,0.15), transparent 70%);
   transform:translate(-50%,-50%);
+  z-index:0;
+}
+
+/* ===== CARDS 3D PRO ===== */
+.card{
+  transform-style:preserve-3d;
+  transition:transform .15s ease, box-shadow .2s ease;
+}
+
+.card:hover{
+  box-shadow:0 30px 60px rgba(0,0,0,0.6);
+}
+
+/* ===== ORB FLOAT ===== */
+@keyframes float{
+  0%{transform:translateY(0)}
+  50%{transform:translateY(-20px)}
+  100%{transform:translateY(0)}
+}
+
+.orb{
+  animation:float 6s ease-in-out infinite;
+}
+
+/* ===== HERO PARALLAX ===== */
+.hero{
+  perspective:1000px;
+}
+
+/* ===== BASE ORIGINAL ===== */
+body{
+  margin:0;
+  font-family:system-ui;
+  color:white;
+  background:linear-gradient(135deg,#000,#0b1220,#020617);
+  overflow-x:hidden;
+}
+
+/* ===== NUEVO: PARTICULAS ===== */
+#particles{
+  position:fixed;
+  width:100%;
+  height:100%;
+  z-index:-1;
+}
+
+/* ===== NUEVO: GLOW ===== */
+.cursor-glow{
+  position:fixed;
+  width:200px;
+  height:200px;
+  border-radius:50%;
+  pointer-events:none;
+  background:radial-gradient(circle, rgba(183,255,0,0.15), transparent 70%);
 }
 
 /* ===== NAV ===== */
@@ -45,69 +80,23 @@ body{
   justify-content:space-between;
   padding:20px;
   background:rgba(0,0,0,0.5);
-  backdrop-filter:blur(10px);
 }
-
-/* ===== MENU ===== */
-.menu span{
-  margin:0 10px;
-  cursor:pointer;
-}
-.menu span:hover{color:#b7ff00}
 
 /* ===== SECCIONES ===== */
 .section{
   display:none;
   padding:50px;
-  opacity:0;
-  transform:scale(.98);
-  transition:.4s;
 }
 .section.active{
   display:block;
-  opacity:1;
-  transform:scale(1);
 }
 
 /* ===== HERO ===== */
-.hero{
-  display:flex;
-  justify-content:space-between;
-  perspective:1000px;
-}
-.hero-left{
-  transform:translateZ(40px);
-}
 .hero h1{
   font-size:80px;
 }
 .hero span{
   color:#b7ff00;
-  text-shadow:0 0 20px #b7ff00;
-}
-
-/* ===== ORB ===== */
-.orb{
-  width:250px;
-  height:250px;
-  border-radius:50%;
-  background:radial-gradient(circle,#1db954,#000);
-  box-shadow:0 0 100px #1db954;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  animation:pulse 2.5s infinite alternate, float 6s infinite;
-}
-
-@keyframes pulse{
-  from{box-shadow:0 0 40px #1db954}
-  to{box-shadow:0 0 120px #1db954}
-}
-
-@keyframes float{
-  0%{transform:translateY(0)}
-  50%{transform:translateY(-20px)}
-  100%{transform:translateY(0)}
 }
 
 /* ===== GRID ===== */
@@ -117,19 +106,33 @@ body{
   gap:20px;
 }
 
-/* ===== CARDS ===== */
+/* ===== CARDS (CON IMAGEN + DESC) ===== */
 .card{
   background:#111;
   border-radius:15px;
   overflow:hidden;
   transform-style:preserve-3d;
   transition:.2s;
-  will-change:transform;
 }
-.card:hover{
-  box-shadow:0 30px 60px rgba(0,0,0,0.6);
+
+.card img{
+  width:100%;
+  height:150px;
+  object-fit:cover;
 }
-.card h4{color:#b7ff00}
+
+.card .info{
+  padding:10px;
+}
+
+.card h4{
+  color:#b7ff00;
+}
+
+.card p{
+  font-size:14px;
+  opacity:.8;
+}
 
 /* ===== PLAYER ===== */
 .player{
@@ -137,15 +140,10 @@ body{
   bottom:0;
   width:100%;
   background:rgba(0,0,0,0.6);
-  backdrop-filter:blur(10px);
-}
-.player.playing{
-  box-shadow:0 0 40px rgba(183,255,0,0.4);
 }
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:768px){
-  .hero{flex-direction:column;text-align:center}
   .hero h1{font-size:40px}
 }
 
@@ -153,6 +151,8 @@ body{
 </head>
 
 <body>
+  <canvas id="particles"></canvas>
+<div class="cursor-glow"></div>
 
 <!-- NUEVO -->
 <canvas id="particles"></canvas>
@@ -160,7 +160,7 @@ body{
 
 <div class="nav">
   <div>🎧 Entre Estudiantes</div>
-  <div class="menu">
+  <div>
     <span onclick="showSection('inicio')">Inicio</span>
     <span onclick="showSection('episodios')">Episodios</span>
     <span onclick="showSection('subir')">Subir</span>
@@ -168,31 +168,40 @@ body{
   </div>
 </div>
 
+<!-- INICIO -->
 <section id="inicio" class="section active">
   <div class="hero">
-    <div class="hero-left">
-      <h1>ENTRE <span>ESTUDIANTES</span></h1>
-      <p>Tu voz. Tu historia.</p>
-    </div>
-    <div class="orb">🎧</div>
+    <h1>ENTRE <span>ESTUDIANTES</span></h1>
   </div>
 </section>
 
+<!-- EPISODIOS -->
 <section id="episodios" class="section">
   <h2>Episodios</h2>
   <div id="podcasts" class="grid"></div>
 </section>
 
+<!-- SUBIR -->
 <section id="subir" class="section">
   <h2>Subir</h2>
-  <input id="title"><br>
-  <input id="audioURL"><br>
+  <input id="title" placeholder="Título"><br>
+  <input id="audioURL" placeholder="MP3"><br>
+  <input id="imageURL" placeholder="Imagen"><br>
+  <input id="desc" placeholder="Descripción"><br>
   <button onclick="addPodcast()">Subir</button>
 </section>
 
+<!-- NOSOTROS (NO SE TOCA) -->
 <section id="nosotros" class="section">
   <h2>Nosotros</h2>
-  <p>Somos estudiantes de medicina...</p>
+
+  <p>Somos estudiantes de medicina de tercer semestre...</p>
+
+  <h3>Misión</h3>
+  <p>Crear un espacio de apoyo académico y emocional.</p>
+
+  <h3>Visión</h3>
+  <p>Ser un referente en educación médica.</p>
 </section>
 
 <div class="player">
@@ -211,131 +220,69 @@ const db=firebase.firestore();
 
 /* ===== NAV ===== */
 function showSection(id){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  setTimeout(()=>document.getElementById(id).classList.add('active'),100);
+ document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
 }
 
-/* ===== CURSOR GLOW ===== */
+/* ===== GLOW ===== */
 const glow=document.querySelector(".cursor-glow");
 document.addEventListener("mousemove",e=>{
  glow.style.left=e.clientX+"px";
  glow.style.top=e.clientY+"px";
 });
 
-/* ===== PARTICULAS PRO ===== */
+/* ===== PARTICULAS ===== */
 const canvas=document.getElementById("particles");
 const ctx=canvas.getContext("2d");
-
 canvas.width=window.innerWidth;
 canvas.height=window.innerHeight;
 
 let particles=[];
-
-for(let i=0;i<80;i++){
+for(let i=0;i<60;i++){
  particles.push({
   x:Math.random()*canvas.width,
   y:Math.random()*canvas.height,
-  r:Math.random()*2+1,
-  dx:(Math.random()-0.5)*0.6,
-  dy:(Math.random()-0.5)*0.6
+  dx:0.3, dy:0.3
  });
 }
 
-function drawParticles(){
+function animate(){
  ctx.clearRect(0,0,canvas.width,canvas.height);
-
  particles.forEach(p=>{
   p.x+=p.dx;
   p.y+=p.dy;
-
-  if(p.x<0||p.x>canvas.width)p.dx*=-1;
-  if(p.y<0||p.y>canvas.height)p.dy*=-1;
-
-  ctx.beginPath();
-  ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-  ctx.fillStyle="rgba(183,255,0,0.6)";
-  ctx.fill();
+  ctx.fillStyle="#b7ff00";
+  ctx.fillRect(p.x,p.y,2,2);
  });
-
- for(let i=0;i<particles.length;i++){
-  for(let j=i+1;j<particles.length;j++){
-   let dx=particles[i].x-particles[j].x;
-   let dy=particles[i].y-particles[j].y;
-   let dist=Math.sqrt(dx*dx+dy*dy);
-
-   if(dist<120){
-    ctx.beginPath();
-    ctx.moveTo(particles[i].x,particles[i].y);
-    ctx.lineTo(particles[j].x,particles[j].y);
-    ctx.strokeStyle="rgba(183,255,0,0.1)";
-    ctx.stroke();
-   }
-  }
- }
-
- requestAnimationFrame(drawParticles);
+ requestAnimationFrame(animate);
 }
-drawParticles();
-
-/* ===== CARDS 3D ===== */
-let mouseX=0,mouseY=0;
-
-document.addEventListener("mousemove",e=>{
- mouseX=e.clientX;
- mouseY=e.clientY;
-});
-
-function animateCards(){
- document.querySelectorAll(".card").forEach(card=>{
-  const rect=card.getBoundingClientRect();
-  const x=mouseX-rect.left;
-  const y=mouseY-rect.top;
-
-  const rx=-(y-rect.height/2)/25;
-  const ry=(x-rect.width/2)/25;
-
-  card.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg) scale(1.04)`;
- });
-
- requestAnimationFrame(animateCards);
-}
-animateCards();
-
-/* ===== PARALLAX HERO ===== */
-document.addEventListener("mousemove",e=>{
- const hero=document.querySelector(".hero-left");
- if(!hero)return;
-
- const x=(e.clientX/window.innerWidth-0.5)*20;
- const y=(e.clientY/window.innerHeight-0.5)*20;
-
- hero.style.transform=`translate(${x}px,${y}px)`;
-});
-
-/* ===== RESIZE ===== */
-window.addEventListener("resize",()=>{
- canvas.width=window.innerWidth;
- canvas.height=window.innerHeight;
-});
+animate();
 
 /* ===== SUBIR ===== */
 function addPodcast(){
  db.collection("podcasts").add({
   title:title.value,
   url:audioURL.value,
+  image:imageURL.value,
+  desc:desc.value,
   time:Date.now()
  });
 }
 
-/* ===== LISTAR ===== */
+/* ===== LISTAR (CON IMAGEN + DESC) ===== */
 db.collection("podcasts").orderBy("time","desc")
 .onSnapshot(snap=>{
  podcasts.innerHTML="";
  snap.forEach(doc=>{
   const d=doc.data();
+
   podcasts.innerHTML+=`
   <div class="card" onclick="play('${d.url}')">
-    <h4>${d.title}</h4>
+    <img src="${d.image}">
+    <div class="info">
+      <h4>${d.title}</h4>
+      <p>${d.desc}</p>
+    </div>
   </div>`;
  });
 });
@@ -345,9 +292,65 @@ function play(url){
  const a=document.getElementById("audioPlayer");
  a.src=url;
  a.play();
- document.querySelector(".player").classList.add("playing");
+}
+/* ===== CURSOR GLOW ===== */
+const glow = document.querySelector(".cursor-glow");
+
+document.addEventListener("mousemove", e=>{
+  glow.style.left = e.clientX + "px";
+  glow.style.top  = e.clientY + "px";
+});
+
+/* ===== PARTICULAS ===== */
+const canvas = document.getElementById("particles");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+for(let i=0;i<80;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:2,
+    dx:(Math.random()-0.5)*0.5,
+    dy:(Math.random()-0.5)*0.5
+  });
 }
 
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  particles.forEach(p=>{
+    p.x+=p.dx;
+    p.y+=p.dy;
+
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+    ctx.fillStyle="#b7ff00";
+    ctx.fill();
+  });
+
+  requestAnimationFrame(animate);
+}
+
+animate();
+
+/* ===== CARDS 3D ===== */
+document.addEventListener("mousemove", e=>{
+  document.querySelectorAll(".card").forEach(card=>{
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const rx = -(y - rect.height/2)/25;
+    const ry = (x - rect.width/2)/25;
+
+    card.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+  });
+});
 </script>
 
 </body>
