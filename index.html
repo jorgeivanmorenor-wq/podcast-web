@@ -273,7 +273,7 @@ document.querySelectorAll(".fade-in").forEach(el=>{
  observer.observe(el);
 });
 
-  function addPodcast(){
+function addPodcast(){
 
   const title = document.getElementById("title").value;
   const url   = document.getElementById("audioURL").value;
@@ -294,6 +294,32 @@ document.querySelectorAll(".fade-in").forEach(el=>{
     time: Date.now()
   });
 }
+  db.collection("podcasts").orderBy("time","desc")
+.onSnapshot(snapshot=>{
+
+  const container = document.getElementById("podcasts");
+  container.innerHTML = "";
+
+  snapshot.forEach(doc=>{
+    const d = doc.data();
+
+    container.innerHTML += `
+      <div class="card">
+
+        <img src="${d.image || 'https://via.placeholder.com/400x200'}" style="width:100%;height:150px;object-fit:cover;">
+
+        <div style="padding:10px">
+          <h3 style="color:#b7ff00">${d.title || ''}</h3>
+          <p style="font-size:14px;opacity:0.8">${d.desc || ''}</p>
+
+          <audio controls style="width:100%;margin-top:10px;" src="${d.url}"></audio>
+        </div>
+
+      </div>
+    `;
+  });
+
+});
 </script>
 
 </body>
