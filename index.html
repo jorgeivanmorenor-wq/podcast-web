@@ -9,6 +9,8 @@
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
 <style>
+
+/* ================= GENERAL ================= */
 body{
   margin:0;
   font-family:Arial;
@@ -16,69 +18,128 @@ body{
   color:white;
 }
 
-/* NAV */
+/* ================= NAV ================= */
 .nav{
   display:flex;
   justify-content:space-between;
   padding:20px 40px;
+  background:black;
   align-items:center;
-  background:#000;
 }
 
 .menu span{
   margin:0 15px;
   cursor:pointer;
+  transition:0.3s;
 }
 
 .menu span:hover{
   color:#b7ff00;
 }
 
-/* SECCIONES */
+/* ================= SECCIONES ================= */
 .section{display:none;padding:40px;}
 .active{display:block;}
 
-/* HERO */
+/* ================= HERO ================= */
 .hero{
   display:flex;
   justify-content:space-between;
   align-items:center;
   padding:60px;
+  gap:50px;
+}
+
+.hero-left{
+  display:flex;
+  flex-direction:column;
+  gap:25px;
 }
 
 .hero-text h1{
-  font-size:60px;
+  font-size:65px;
+  margin:0;
+  letter-spacing:2px;
 }
 
 .hero-text span{
   color:#b7ff00;
+  text-shadow:0 0 20px #b7ff00;
 }
 
+.hero-text p{
+  opacity:0.8;
+  font-size:18px;
+}
+
+.hero button{
+  padding:15px 25px;
+  border:none;
+  border-radius:30px;
+  background:#b7ff00;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.hero button:hover{
+  transform:scale(1.05);
+}
+
+/* ================= IMAGEN UNIVERSIDAD ================= */
+.uni-container{
+  background:rgba(255,255,255,0.05);
+  padding:15px;
+  border-radius:15px;
+  backdrop-filter:blur(10px);
+  box-shadow:0 0 30px rgba(255,255,255,0.15);
+  transition:0.4s;
+  width:fit-content;
+}
+
+.uni-container:hover{
+  transform:scale(1.05);
+}
+
+.uni-img{
+  width:320px;
+  border-radius:10px;
+  display:block;
+}
+
+/* ================= NEON ================= */
 .circle{
-  width:250px;
-  height:250px;
+  width:300px;
+  height:300px;
   border-radius:50%;
   background: radial-gradient(circle, #ff00ff, #5a00ff);
   box-shadow:0 0 80px #ff00ff;
+  animation: glow 2s infinite alternate;
 }
 
-/* GRID */
+@keyframes glow{
+  from{ box-shadow:0 0 40px #ff00ff; }
+  to{ box-shadow:0 0 120px #ff00ff; }
+}
+
+/* ================= GRID ================= */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
-  gap:20px;
+  gap:25px;
 }
 
+/* ================= CARDS ================= */
 .card{
   background:#1a1a1a;
   border-radius:15px;
   overflow:hidden;
-  cursor:pointer;
   transition:0.3s;
 }
 
 .card:hover{
   transform:scale(1.05);
+  box-shadow:0 0 20px rgba(183,255,0,0.3);
 }
 
 .card img{
@@ -92,42 +153,34 @@ body{
   color:#b7ff00;
 }
 
-/* PLAYER PAGE */
-.playerPage{
-  display:none;
-  padding:40px;
-}
-
-.playerBox{
-  max-width:900px;
-  margin:auto;
-}
-
-.playerBox img{
-  width:100%;
-  border-radius:10px;
-}
-
 audio{
   width:100%;
-  margin-top:15px;
 }
 
-/* INPUTS */
+/* ================= FORM ================= */
 input{
-  padding:10px;
+  padding:12px;
   margin:5px;
   border-radius:20px;
   border:none;
+  width:250px;
 }
 
 button{
-  padding:10px 15px;
+  padding:12px 18px;
   border:none;
   border-radius:20px;
   background:#b7ff00;
   cursor:pointer;
 }
+
+/* ================= NOSOTROS ================= */
+#nosotros p{
+  max-width:800px;
+  line-height:1.6;
+  opacity:0.9;
+}
+
 </style>
 </head>
 
@@ -139,139 +192,139 @@ button{
   <div class="menu">
     <span onclick="show('inicio')">Inicio</span>
     <span onclick="show('episodios')">Episodios</span>
+    <span onclick="show('subir')">Subir</span>
     <span onclick="show('nosotros')">Nosotros</span>
     <span onclick="show('comunidad')">Comunidad</span>
   </div>
 </div>
 
-<!-- INICIO -->
+<!-- ================= INICIO ================= -->
 <div id="inicio" class="section active">
   <div class="hero">
-    <div class="hero-text">
-      <h1>ENTRE <span>ESTUDIANTES</span></h1>
-      <p>Tu voz. Tu historia. Tu podcast.</p>
-      <input id="username" placeholder="Tu nombre">
-      <br>
-      <button onclick="show('episodios')">Escuchar ahora</button>
+
+    <div class="hero-left">
+
+      <div class="hero-text">
+        <h1>ENTRE <span>ESTUDIANTES</span></h1>
+        <p>Tu voz. Tu historia. Tu podcast.</p>
+        <button onclick="show('episodios')">Escuchar ahora</button>
+      </div>
+
+      <!-- ✅ TU IMAGEN REAL -->
+      <div class="uni-container">
+        <img class="uni-img" src="download.png">
+      </div>
+
     </div>
+
     <div class="circle"></div>
+
   </div>
 </div>
 
-<!-- EPISODIOS -->
+<!-- ================= EPISODIOS ================= -->
 <div id="episodios" class="section">
   <h2>Episodios</h2>
-
-  <!-- ADMIN -->
-  <div>
-    <input id="title" placeholder="Título"><br>
-    <input id="audioURL" placeholder="Link .mp3"><br>
-    <input id="imageURL" placeholder="Imagen"><br>
-    <input id="desc" placeholder="Descripción"><br>
-    <button onclick="addPodcast()">Subir episodio</button>
-  </div>
-
   <div id="podcasts" class="grid"></div>
 </div>
 
-<!-- NOSOTROS -->
+<!-- ================= SUBIR ================= -->
+<div id="subir" class="section">
+  <h2>Subir episodio</h2>
+
+  <input id="title" placeholder="Título"><br>
+  <input id="audioURL" placeholder="Link .mp3"><br>
+  <input id="imageURL" placeholder="Imagen"><br>
+  <input id="desc" placeholder="Descripción"><br>
+
+  <button onclick="addPodcast()">Subir episodio</button>
+</div>
+
+<!-- ================= NOSOTROS ================= -->
 <div id="nosotros" class="section">
   <h2>¿Quiénes somos?</h2>
+
   <p>
-  Somos estudiantes de medicina que creamos este espacio para compartir experiencias,
-  aprendizajes y conversaciones reales.
+  Somos estudiantes de medicina de tercer semestre que, dentro de la materia de emprendimiento, decidimos crear este podcast como una forma diferente de desarrollar una idea propia basada en lo que vivimos día a día.
+  </p>
+
+  <p>
+  Sabemos que este proyecto no nace realmente con el objetivo principal de generar dinero, sino como un espacio donde podamos compartir experiencias reales, lo que aprendemos en la carrera y también lo que muchas veces nadie explica cuando uno entra a estudiar medicina.
+  </p>
+
+  <p>
+  Queremos mostrar el lado real de esta carrera: el estrés, la presión, las dudas, pero también la motivación, el crecimiento personal y todo lo que se vive en el proceso. La idea es que cualquier estudiante del área de la salud que escuche este podcast pueda sentirse identificado y acompañado.
+  </p>
+
+  <h3>Misión</h3>
+  <p>
+  Crear un espacio cercano y auténtico donde estudiantes del área de la salud puedan encontrar apoyo académico y emocional, compartiendo experiencias reales de forma clara, sencilla y sin tanta formalidad.
+  </p>
+
+  <h3>Visión</h3>
+  <p>
+  Convertirnos en un punto de referencia entre estudiantes de medicina y carreras afines, no por ser perfectos, sino por ser reales, útiles y por aportar contenido que de verdad ayude a quienes están pasando por este mismo camino.
   </p>
 </div>
 
-<!-- COMUNIDAD -->
+<!-- ================= COMUNIDAD ================= -->
 <div id="comunidad" class="section">
   <h2>Comunidad</h2>
-  <p>
-  Espacio para conectar, compartir ideas y crecer juntos como estudiantes.
-  </p>
-</div>
-
-<!-- PLAYER -->
-<div id="playerPage" class="playerPage">
-  <button onclick="volver()">⬅ Volver</button>
-
-  <div class="playerBox">
-    <img id="playerImg">
-    <h2 id="playerTitle"></h2>
-    <p id="playerDesc"></p>
-    <audio id="audioPlayer" controls></audio>
-  </div>
+  <p>Espacio para compartir ideas y crecer juntos.</p>
 </div>
 
 <script>
-const ADMIN_PASSWORD = "12345admin";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyDz5tYhKP1gX2UToItY0VarGLCJLoffjbg",
-  authDomain: "entre-estudiantes.firebaseapp.com",
-  projectId: "entre-estudiantes"
+const ADMIN_PASSWORD="12345admin";
+
+const firebaseConfig={
+ apiKey:"AIzaSyDz5tYhKP1gX2UToItY0VarGLCJLoffjbg",
+ authDomain:"entre-estudiantes.firebaseapp.com",
+ projectId:"entre-estudiantes"
 };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const db=firebase.firestore();
 
-/* SUBIR */
 function addPodcast(){
-  const pass = prompt("Clave admin");
+ const pass=prompt("Clave admin");
 
-  if(pass !== ADMIN_PASSWORD){
-    alert("No autorizado");
-    return;
-  }
+ if(pass!==ADMIN_PASSWORD){
+  alert("No autorizado");
+  return;
+ }
 
-  db.collection("podcasts").add({
-    title:title.value,
-    url:audioURL.value,
-    image:imageURL.value,
-    desc:desc.value,
-    time:Date.now()
-  });
+ db.collection("podcasts").add({
+  title:title.value,
+  url:audioURL.value,
+  image:imageURL.value,
+  desc:desc.value,
+  time:Date.now()
+ });
 }
 
-/* MOSTRAR */
 db.collection("podcasts").orderBy("time","desc")
 .onSnapshot(snapshot=>{
-  podcasts.innerHTML="";
+ podcasts.innerHTML="";
 
-  snapshot.forEach(doc=>{
-    const d = doc.data();
+ snapshot.forEach(doc=>{
+  const d=doc.data();
 
-    podcasts.innerHTML += `
-    <div class="card" onclick="openPlayer('${d.url}','${d.title}','${d.image}','${d.desc}')">
-      <img src="${d.image || 'https://via.placeholder.com/300'}">
-      <h3>${d.title}</h3>
-    </div>
-    `;
-  });
+  podcasts.innerHTML+=`
+  <div class="card">
+    <img src="${d.image || 'https://via.placeholder.com/300'}">
+    <h3>${d.title}</h3>
+    <audio controls src="${d.url}"></audio>
+  </div>
+  `;
+ });
 });
 
-/* PLAYER */
-function openPlayer(url,title,img,desc){
-  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
-  document.getElementById("playerPage").style.display="block";
-
-  audioPlayer.src=url;
-  playerTitle.innerText=title;
-  playerImg.src=img;
-  playerDesc.innerText=desc;
-}
-
-function volver(){
-  document.getElementById("playerPage").style.display="none";
-  show("episodios");
-  audioPlayer.pause();
-}
-
-/* NAV */
 function show(section){
-  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
-  document.getElementById(section).classList.add("active");
+ document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+ document.getElementById(section).classList.add("active");
 }
+
 </script>
 
 </body>
