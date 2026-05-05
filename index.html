@@ -10,95 +10,143 @@
 
 <style>
 
-/* ===== BASE ORIGINAL ===== */
-*{box-sizing:border-box}
+/* ===== SCROLL SUAVE GLOBAL ===== */
+html{
+  scroll-behavior:smooth;
+}
+
+/* ===== GENERAL ===== */
 body{
   margin:0;
-  font-family:system-ui;
+  font-family:Arial;
+  background: radial-gradient(circle at 20% 20%, #1a0033, #000);
   color:white;
-  background:linear-gradient(135deg,#000,#0b1220,#020617);
-  overflow-x:hidden;
-}
-
-/* ===== PARTICLES ===== */
-#particles{
-  position:fixed;
-  width:100%;
-  height:100%;
-  z-index:-1;
-}
-
-/* ===== GLOW ===== */
-.cursor-glow{
-  position:fixed;
-  width:200px;
-  height:200px;
-  border-radius:50%;
-  pointer-events:none;
-  background:radial-gradient(circle, rgba(183,255,0,0.15), transparent 70%);
 }
 
 /* ===== NAV ===== */
 .nav{
   display:flex;
   justify-content:space-between;
-  padding:20px;
-  background:rgba(0,0,0,0.6);
+  padding:20px 40px;
+  background:black;
+  align-items:center;
+}
+
+.menu span{
+  margin:0 15px;
+  cursor:pointer;
+  font-size:18px;
+  transition:0.3s;
+}
+
+.menu span:hover{
+  color:#b7ff00;
 }
 
 /* ===== SECCIONES ===== */
-.section{display:none;padding:50px}
-.section.active{display:block}
+.section{
+  display:none;
+  padding:50px;
+  opacity:0;
+  transform:translateY(40px);
+  transition:all 0.6s ease;
+}
+
+.active{
+  display:block;
+  opacity:1;
+  transform:translateY(0);
+}
 
 /* ===== HERO ===== */
 .hero{
   display:flex;
   justify-content:space-between;
+  align-items:center;
+  gap:50px;
+}
+
+.hero-text h1{
+  font-size:90px;
+}
+
+.hero-text span{
+  color:#b7ff00;
+  text-shadow:0 0 25px #b7ff00;
+}
+
+.hero-text p{
+  font-size:22px;
+}
+
+/* ===== LOGO ===== */
+.uni-container{
   perspective:1000px;
 }
-.hero-left{transform:translateZ(40px)}
-.hero h1{font-size:80px}
-.hero span{color:#b7ff00}
+
+.uni-img{
+  width:520px;
+  transition: transform 0.2s;
+}
+
+/* ===== CÍRCULO ===== */
+.circle{
+  width:300px;
+  height:300px;
+  border-radius:50%;
+  background: radial-gradient(circle, #ff00ff, #5a00ff);
+  box-shadow:0 0 80px #ff00ff;
+}
 
 /* ===== GRID ===== */
 .grid{
   display:grid;
   grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
-  gap:20px;
+  gap:25px;
 }
 
 /* ===== CARDS ===== */
 .card{
-  background:#111;
+  background:#1a1a1a;
   border-radius:15px;
   overflow:hidden;
-  transform-style:preserve-3d;
-  transition:.2s;
-}
-.card:hover{box-shadow:0 30px 60px black}
-
-.card img{
-  width:100%;
-  height:160px;
-  object-fit:cover;
+  transition:0.3s;
 }
 
-.card .meta{padding:10px}
-.card h4{color:#b7ff00}
-.card p{font-size:14px;opacity:.8}
+.card:hover{
+  transform:scale(1.05);
+}
 
-/* ===== PLAYER ===== */
-.player{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  background:rgba(0,0,0,0.7);
+/* ===== ANIMACIÓN SCROLL ===== */
+.fade-in{
+  opacity:0;
+  transform:translateY(50px);
+  transition:all 0.8s ease;
+}
+
+.fade-in.visible{
+  opacity:1;
+  transform:translateY(0);
 }
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:768px){
-  .hero{flex-direction:column;text-align:center}
-  .hero h1{font-size:40px}
+  .hero{
+    flex-direction:column;
+    text-align:center;
+  }
+
+  .hero-text h1{
+    font-size:45px;
+  }
+
+  .uni-img{
+    width:90%;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
 }
 
 </style>
@@ -106,163 +154,113 @@ body{
 
 <body>
 
-<canvas id="particles"></canvas>
-<div class="cursor-glow"></div>
-
 <div class="nav">
-  <div>🎧 Entre Estudiantes</div>
-  <div>
+  <div style="font-size:22px;">🎧 Entre Estudiantes</div>
+  <div class="menu">
     <span onclick="show('inicio')">Inicio</span>
     <span onclick="show('episodios')">Episodios</span>
     <span onclick="show('subir')">Subir</span>
     <span onclick="show('nosotros')">Nosotros</span>
+    <span onclick="show('comunidad')">Comunidad</span>
   </div>
 </div>
 
-<section id="inicio" class="section active">
+<!-- INICIO -->
+<div id="inicio" class="section active fade-in">
   <div class="hero">
-    <div class="hero-left">
-      <h1>ENTRE <span>ESTUDIANTES</span></h1>
-      <p>Tu voz. Tu historia.</p>
-    </div>
-  </div>
-</section>
 
-<section id="episodios" class="section">
+    <div>
+      <h1>ENTRE <span>ESTUDIANTES</span></h1>
+      <p>Tu voz. Tu historia. Tu podcast.</p>
+
+      <div class="uni-container">
+        <img class="uni-img" src="download.png">
+      </div>
+    </div>
+
+    <div class="circle"></div>
+
+  </div>
+</div>
+
+<!-- EPISODIOS -->
+<div id="episodios" class="section fade-in">
   <h2>Episodios</h2>
   <div id="podcasts" class="grid"></div>
-</section>
+</div>
 
-<section id="subir" class="section">
-  <h2>Subir</h2>
+<!-- SUBIR -->
+<div id="subir" class="section fade-in">
+  <h2>Subir episodio</h2>
   <input id="title"><br>
   <input id="audioURL"><br>
-  <input id="imageURL"><br>
-  <input id="desc"><br>
   <button onclick="addPodcast()">Subir</button>
-</section>
+</div>
 
-<section id="nosotros" class="section">
-  <h2>Nosotros</h2>
-  <p>Somos estudiantes de medicina...</p>
+<!-- NOSOTROS -->
+<div id="nosotros" class="section fade-in">
+  <h2>¿Quiénes somos?</h2>
 
   <h3>Misión</h3>
-  <p>Crear un espacio de apoyo académico.</p>
+  <p>Crear un espacio cercano...</p>
 
   <h3>Visión</h3>
-  <p>Ser referencia en educación médica.</p>
-</section>
+  <p>Ser un referente...</p>
+</div>
 
-<div class="player">
-  <audio id="audioPlayer" controls></audio>
+<!-- COMUNIDAD -->
+<div id="comunidad" class="section fade-in">
+  <h2>Comunidad</h2>
 </div>
 
 <script>
 
 /* ===== FIREBASE ===== */
-firebase.initializeApp({
- apiKey:"AIza...",
- authDomain:"entre-estudiantes.firebaseapp.com",
- projectId:"entre-estudiantes"
-});
+const firebaseConfig={apiKey:"AIza..."};
+firebase.initializeApp(firebaseConfig);
 const db=firebase.firestore();
 
-/* ===== NAV ===== */
-function show(id){
- document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
- document.getElementById(id).classList.add('active');
+/* ===== CAMBIO DE SECCIÓN ===== */
+function show(section){
+ document.querySelectorAll(".section").forEach(s=>{
+  s.classList.remove("active");
+ });
+
+ setTimeout(()=>{
+  document.getElementById(section).classList.add("active");
+ },150);
 }
 
-/* ===== GLOW ===== */
-const glow=document.querySelector(".cursor-glow");
-document.addEventListener("mousemove",e=>{
- glow.style.left=e.clientX+"px";
- glow.style.top=e.clientY+"px";
+/* ===== EFECTO 3D ===== */
+const logo=document.querySelector(".uni-img");
+
+logo.addEventListener("mousemove",e=>{
+ const rect=logo.getBoundingClientRect();
+ const x=e.clientX-rect.left;
+ const y=e.clientY-rect.top;
+ const cx=rect.width/2;
+ const cy=rect.height/2;
+
+ logo.style.transform=
+ `rotateX(${-(y-cy)/8}deg) rotateY(${(x-cx)/8}deg) scale(1.05)`;
 });
 
-/* ===== PARTICULAS ===== */
-const canvas=document.getElementById("particles");
-const ctx=canvas.getContext("2d");
+logo.addEventListener("mouseleave",()=>{
+ logo.style.transform="rotateX(0) rotateY(0)";
+});
 
-canvas.width=innerWidth;
-canvas.height=innerHeight;
-
-let particles=[];
-for(let i=0;i<80;i++){
- particles.push({
-  x:Math.random()*canvas.width,
-  y:Math.random()*canvas.height,
-  dx:(Math.random()-0.5)*0.5,
-  dy:(Math.random()-0.5)*0.5
- });
-}
-
-function draw(){
- ctx.clearRect(0,0,canvas.width,canvas.height);
-
- particles.forEach(p=>{
-  p.x+=p.dx;
-  p.y+=p.dy;
-
-  ctx.beginPath();
-  ctx.arc(p.x,p.y,2,0,Math.PI*2);
-  ctx.fillStyle="#b7ff00";
-  ctx.fill();
- });
-
- requestAnimationFrame(draw);
-}
-draw();
-
-/* ===== CARDS 3D ===== */
-document.addEventListener("mousemove",e=>{
- document.querySelectorAll(".card").forEach(card=>{
-  const r=card.getBoundingClientRect();
-  const x=e.clientX-r.left;
-  const y=e.clientY-r.top;
-
-  const rx=-(y-r.height/2)/25;
-  const ry=(x-r.width/2)/25;
-
-  card.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg)`;
+/* ===== SCROLL ANIMADO ===== */
+const observer=new IntersectionObserver(entries=>{
+ entries.forEach(entry=>{
+  if(entry.isIntersecting){
+    entry.target.classList.add("visible");
+  }
  });
 });
 
-/* ===== SUBIR ===== */
-function addPodcast(){
- db.collection("podcasts").add({
-  title:title.value,
-  url:audioURL.value,
-  image:imageURL.value,
-  desc:desc.value,
-  time:Date.now()
- });
-}
-
-/* ===== LISTAR ===== */
-db.collection("podcasts").orderBy("time","desc")
-.onSnapshot(snap=>{
- podcasts.innerHTML="";
- snap.forEach(doc=>{
-  const d=doc.data();
-
-  podcasts.innerHTML+=`
-  <div class="card" onclick="play('${d.url}')">
-    <img src="${d.image || ''}">
-    <div class="meta">
-      <h4>${d.title}</h4>
-      <p>${d.desc || ''}</p>
-    </div>
-  </div>`;
- });
+document.querySelectorAll(".fade-in").forEach(el=>{
+ observer.observe(el);
 });
-
-/* ===== PLAYER ===== */
-function play(url){
- const a=document.getElementById("audioPlayer");
- a.src=url;
- a.play();
-}
 
 </script>
 
