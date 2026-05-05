@@ -1,242 +1,387 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Entre Estudiantes</title>
 
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
 <style>
-
-/* ===== GENERAL ===== */
+/* ====== RESET ====== */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
   margin:0;
-  font-family:Arial;
-  background: radial-gradient(circle at 20% 20%, #1a0033, #000);
-  color:white;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;
+  color:#fff;
+  background:
+    radial-gradient(800px 400px at 10% 10%, rgba(183,255,0,.06), transparent 60%),
+    radial-gradient(700px 300px at 90% 20%, rgba(255,0,255,.05), transparent 60%),
+    linear-gradient(135deg,#000,#0b1220,#020617);
+  background-size: 200% 200%;
+  animation:bgMove 14s ease-in-out infinite;
+  overflow-x:hidden;
+}
+@keyframes bgMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 
-/* ===== NAV ===== */
+/* ====== NAV ====== */
 .nav{
-  display:flex;
-  justify-content:space-between;
-  padding:20px 40px;
-  background:black;
+  position:sticky; top:0; z-index:20;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:16px 24px;
+  background:rgba(0,0,0,.6);
+  backdrop-filter: blur(10px);
+  border-bottom:1px solid rgba(255,255,255,.06);
 }
+.brand{font-weight:700; letter-spacing:.5px}
+.menu span{
+  margin:0 10px; cursor:pointer; font-size:16px; opacity:.85;
+  transition:color .2s, opacity .2s, transform .1s;
+}
+.menu span:hover{color:#b7ff00; opacity:1; transform:translateY(-1px)}
 
-/* ===== SECCIONES ===== */
+/* ====== SECCIONES + TRANSICIÓN ====== */
 .section{
-  display:none;
-  padding:50px;
-  opacity:0;
-  transform:translateY(30px);
-  transition:.5s;
+  display:none; padding:48px 20px;
+  opacity:0; transform:translateY(24px);
+  transition:opacity .45s ease, transform .45s ease;
 }
+.section.active{display:block; opacity:1; transform:translateY(0)}
 
-.active{
-  display:block;
-  opacity:1;
-  transform:translateY(0);
-}
-
-/* ===== HERO ===== */
+/* ====== HERO ====== */
 .hero{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+  max-width:1200px; margin:0 auto;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:40px;
+}
+.hero-left{display:flex; flex-direction:column; gap:20px}
+.hero h1{
+  margin:0; font-size:clamp(40px,6vw,88px); line-height:1;
+  letter-spacing:2px;
+}
+.hero h1 span{
+  color:#b7ff00; text-shadow:0 0 22px rgba(183,255,0,.8);
+}
+.hero p{margin:0; font-size:clamp(16px,2.4vw,22px); opacity:.9}
+.btn{
+  display:inline-block; padding:14px 22px; border-radius:999px;
+  background:#b7ff00; color:#000; font-weight:700; cursor:pointer;
+  border:none; transition:transform .1s, box-shadow .2s;
+}
+.btn:hover{transform:translateY(-1px); box-shadow:0 10px 30px rgba(183,255,0,.35)}
+
+/* ====== LOGO 3D ====== */
+.uni-container{perspective:1000px}
+.uni-img{
+  width:min(520px,90vw); display:block;
+  transform-style:preserve-3d;
+  transition:transform .15s ease;
+  will-change:transform;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,.6));
 }
 
-.hero h1{font-size:80px;}
-.hero span{color:#b7ff00;}
-
-/* ===== BOTONES ===== */
-button{
-  padding:12px 20px;
-  border:none;
-  border-radius:20px;
-  background:#b7ff00;
-  cursor:pointer;
+/* ====== “ORBE” REEMPLAZADO POR ICONO AUDIO ====== */
+.orb{
+  width:260px; height:260px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background: radial-gradient(circle at 30% 30%, #1db954, #000 70%);
+  box-shadow:0 0 80px rgba(29,185,84,.6);
+  animation:pulse 2.5s ease-in-out infinite alternate;
 }
+@keyframes pulse{
+  from{box-shadow:0 0 40px rgba(29,185,84,.5)}
+  to{box-shadow:0 0 120px rgba(29,185,84,.9)}
+}
+.orb span{font-size:72px}
 
-/* ===== GRID ===== */
+/* ====== GRID / CARDS ====== */
+.container{max-width:1200px; margin:0 auto}
+h2{font-size:clamp(26px,3vw,36px); margin:0 0 16px}
+h3{margin:16px 0 6px}
 .grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
-  gap:20px;
+  display:grid; gap:20px;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
 }
-
 .card{
-  background:#1a1a1a;
-  padding:15px;
-  border-radius:10px;
+  background:rgba(20,20,30,.9);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:16px; overflow:hidden;
+  transition:transform .15s, box-shadow .2s;
 }
+.card:hover{transform:translateY(-4px); box-shadow:0 20px 40px rgba(0,0,0,.5)}
+.card img{width:100%; height:160px; object-fit:cover}
+.card .meta{padding:12px}
+.card .meta h4{margin:0 0 6px; color:#b7ff00}
+.card .meta small{opacity:.7}
 
-/* ===== MODO ESTUDIO ===== */
-.study-box{
-  margin-top:20px;
-  padding:20px;
-  background:#0f172a;
-  border-radius:15px;
-  display:none;
+/* ====== FORM ====== */
+.form input{
+  width:260px; max-width:90%;
+  padding:10px 12px; margin:6px 0;
+  border-radius:999px; border:none;
 }
+.form .btn{margin-top:8px}
 
-.study-box h3{color:#b7ff00;}
+/* ====== NOSOTROS ====== */
+#nosotros p{max-width:820px; line-height:1.7; opacity:.92}
 
-.question{
-  margin-top:10px;
-  padding:10px;
-  background:#111;
-  border-radius:10px;
+/* ====== REPRODUCTOR FIJO ====== */
+.player{
+  position:fixed; left:0; right:0; bottom:0; z-index:30;
+  background:rgba(0,0,0,.85);
+  backdrop-filter:blur(10px);
+  border-top:1px solid rgba(255,255,255,.08);
+  padding:10px 12px;
 }
-
-/* ===== RESPONSIVE ===== */
-@media(max-width:768px){
-  .hero{flex-direction:column;text-align:center;}
-  .hero h1{font-size:40px;}
+.player-wrap{
+  max-width:1200px; margin:0 auto;
+  display:grid; grid-template-columns: 1fr auto auto; gap:12px; align-items:center;
 }
+.player-info{overflow:hidden}
+.player-info strong{display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.player-info small{opacity:.7}
+.controls{display:flex; gap:10px; align-items:center}
+.controls button{
+  border:none; border-radius:999px; padding:8px 12px; cursor:pointer;
+}
+.play{background:#b7ff00; color:#000; font-weight:700}
+.next{background:#222; color:#fff}
+audio{width:100%}
 
+/* ====== RESPONSIVE ====== */
+@media (max-width: 860px){
+  .hero{flex-direction:column; text-align:center}
+  .orb{width:200px;height:200px}
+  .player-wrap{grid-template-columns:1fr}
+}
 </style>
 </head>
 
 <body>
 
+<!-- NAV -->
 <div class="nav">
-  <div>🎧 Entre Estudiantes</div>
-  <div>
-    <span onclick="show('inicio')">Inicio</span>
-    <span onclick="show('episodios')">Episodios</span>
-    <span onclick="show('subir')">Subir</span>
-    <span onclick="show('nosotros')">Nosotros</span>
+  <div class="brand">🎧 Entre Estudiantes</div>
+  <div class="menu">
+    <span onclick="showSection('inicio')">Inicio</span>
+    <span onclick="showSection('episodios')">Episodios</span>
+    <span onclick="showSection('subir')">Subir</span>
+    <span onclick="showSection('nosotros')">Nosotros</span>
+    <span onclick="showSection('comunidad')">Comunidad</span>
   </div>
 </div>
 
 <!-- INICIO -->
-<div id="inicio" class="section active">
-  <div class="hero">
-    <div>
-      <h1>ENTRE <span>ESTUDIANTES</span></h1>
-      <p>Tu voz. Tu historia.</p>
+<section id="inicio" class="section active">
+  <div class="hero container">
+    <div class="hero-left">
+      <div>
+        <h1>ENTRE <span>ESTUDIANTES</span></h1>
+        <p>Tu voz. Tu historia. Tu podcast.</p>
+      </div>
+      <button class="btn" onclick="showSection('episodios')">Escuchar ahora</button>
+
+      <div class="uni-container">
+        <img class="uni-img" src="download.png" alt="Logo universidad" />
+      </div>
+    </div>
+
+    <div class="orb" aria-hidden="true">
+      <span>🎧</span>
     </div>
   </div>
-</div>
+</section>
 
 <!-- EPISODIOS -->
-<div id="episodios" class="section">
-  <h2>Episodios</h2>
-  <div id="podcasts" class="grid"></div>
-
-  <div id="studyMode" class="study-box">
-    <h3>📚 Modo Estudio</h3>
-
-    <p id="summary"></p>
-
-    <h4>Conceptos clave</h4>
-    <ul id="concepts"></ul>
-
-    <h4>Preguntas tipo examen</h4>
-    <div id="questions"></div>
-
-    <button onclick="closeStudy()">Cerrar</button>
+<section id="episodios" class="section">
+  <div class="container">
+    <h2>Episodios</h2>
+    <div id="podcasts" class="grid"></div>
   </div>
-</div>
+</section>
 
 <!-- SUBIR -->
-<div id="subir" class="section">
-  <h2>Subir episodio</h2>
-  <input id="title" placeholder="Título"><br>
-  <input id="audioURL" placeholder="Link .mp3"><br>
-  <button onclick="addPodcast()">Subir</button>
-</div>
+<section id="subir" class="section">
+  <div class="container">
+    <h2>Subir episodio</h2>
+    <div class="form">
+      <input id="title" placeholder="Título" />
+      <br />
+      <input id="audioURL" placeholder="Link .mp3" />
+      <br />
+      <input id="imageURL" placeholder="Imagen (URL)" />
+      <br />
+      <input id="desc" placeholder="Descripción" />
+      <br />
+      <button class="btn" onclick="addPodcast()">Subir episodio</button>
+    </div>
+  </div>
+</section>
 
-<!-- NOSOTROS -->
-<div id="nosotros" class="section">
-  <h2>¿Quiénes somos?</h2>
+<!-- NOSOTROS (mantén tu texto exacto si lo tienes) -->
+<section id="nosotros" class="section">
+  <div class="container">
+    <h2>¿Quiénes somos?</h2>
+    <p>
+      Somos estudiantes de medicina de tercer semestre que, en la asignatura de emprendimiento,
+      creamos este podcast para compartir experiencias reales de la carrera. No es un proyecto
+      centrado en ingresos, sino en aportar conocimiento y apoyo emocional a estudiantes del área de la salud.
+    </p>
+    <h3>Misión</h3>
+    <p>
+      Crear un espacio cercano y auténtico donde estudiantes encuentren apoyo académico y motivación
+      mediante experiencias reales.
+    </p>
+    <h3>Visión</h3>
+    <p>
+      Ser un referente entre estudiantes de ciencias de la salud por contenido útil, honesto y aplicable.
+    </p>
+  </div>
+</section>
 
-  <p>
-  Somos estudiantes de medicina de tercer semestre que creamos este podcast como proyecto académico dentro de la materia de emprendimiento.
-  </p>
+<!-- COMUNIDAD -->
+<section id="comunidad" class="section">
+  <div class="container">
+    <h2>Comunidad</h2>
+    <p>Espacio para compartir ideas y experiencias.</p>
+  </div>
+</section>
 
-  <h3>Misión</h3>
-  <p>
-  Crear un espacio donde estudiantes encuentren apoyo académico y emocional.
-  </p>
-
-  <h3>Visión</h3>
-  <p>
-  Ser un referente estudiantil en el área de la salud.
-  </p>
+<!-- REPRODUCTOR FIJO -->
+<div class="player">
+  <div class="player-wrap">
+    <div class="player-info">
+      <strong id="nowTitle">Sin reproducción</strong>
+      <small id="nowMeta">—</small>
+    </div>
+    <div class="controls">
+      <button class="play" id="btnPlay">Play</button>
+      <button class="next" id="btnNext">Siguiente</button>
+    </div>
+    <audio id="audioPlayer" controls></audio>
+  </div>
 </div>
 
 <script>
-
 /* ===== FIREBASE ===== */
-firebase.initializeApp({
+const firebaseConfig={
   apiKey:"AIzaSyDz5tYhKP1gX2UToItY0VarGLCJLoffjbg",
   authDomain:"entre-estudiantes.firebaseapp.com",
   projectId:"entre-estudiantes"
-});
-
+};
+firebase.initializeApp(firebaseConfig);
 const db=firebase.firestore();
 
-/* ===== CAMBIO SECCIÓN ===== */
-function show(section){
- document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
- setTimeout(()=>document.getElementById(section).classList.add("active"),150);
+/* ===== NAVEGACIÓN (transición suave) ===== */
+function showSection(id){
+  const all = document.querySelectorAll('.section');
+  all.forEach(s=>s.classList.remove('active'));
+  setTimeout(()=>{
+    document.getElementById(id).classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  },120);
 }
+
+/* ===== 3D LOGO ===== */
+const logo = document.querySelector('.uni-img');
+if(logo){
+  logo.addEventListener('mousemove', e=>{
+    const r=logo.getBoundingClientRect();
+    const x=e.clientX-r.left, y=e.clientY-r.top;
+    const cx=r.width/2, cy=r.height/2;
+    const rx = -(y-cy)/8, ry=(x-cx)/8;
+    logo.style.transform=`rotateX(${rx}deg) rotateY(${ry}deg) scale(1.05)`;
+  });
+  logo.addEventListener('mouseleave', ()=> logo.style.transform='rotateX(0) rotateY(0)');
+}
+
+/* ===== DATA + PLAYER ===== */
+let queue = [];
+let current = -1;
+
+const $podcasts = document.getElementById('podcasts');
+const $audio = document.getElementById('audioPlayer');
+const $title = document.getElementById('nowTitle');
+const $meta  = document.getElementById('nowMeta');
+const $btnPlay = document.getElementById('btnPlay');
+const $btnNext = document.getElementById('btnNext');
+
+function render(){
+  $podcasts.innerHTML='';
+  queue.forEach((d, i)=>{
+    const el = document.createElement('div');
+    el.className='card';
+    el.innerHTML = `
+      <img src="${d.image || 'https://via.placeholder.com/400x200'}" alt="">
+      <div class="meta">
+        <h4>${d.title || 'Sin título'}</h4>
+        <small>${d.date || ''}</small>
+      </div>
+    `;
+    el.onclick = ()=> playIndex(i);
+    $podcasts.appendChild(el);
+  });
+}
+
+function playIndex(i){
+  if(i<0 || i>=queue.length) return;
+  current = i;
+  const d = queue[i];
+  $audio.src = d.url;
+  $title.textContent = d.title || 'Reproduciendo';
+  $meta.textContent  = d.date || '';
+  $audio.play();
+}
+
+$btnPlay.onclick = ()=>{
+  if(!$audio.src && queue.length){ playIndex(0); return; }
+  if($audio.paused) $audio.play(); else $audio.pause();
+};
+$btnNext.onclick = ()=>{
+  if(!queue.length) return;
+  const next = (current+1) % queue.length;
+  playIndex(next);
+};
 
 /* ===== SUBIR ===== */
+const ADMIN_PASSWORD = "12345admin";
 function addPodcast(){
- db.collection("podcasts").add({
-  title:title.value,
-  url:audioURL.value,
-  time:Date.now()
- });
+  const pass = prompt("Clave admin:");
+  if(pass !== ADMIN_PASSWORD){ alert("No autorizado"); return; }
+
+  const title = document.getElementById('title').value;
+  const url   = document.getElementById('audioURL').value;
+  const image = document.getElementById('imageURL').value;
+  const desc  = document.getElementById('desc').value;
+
+  if(!url || !url.endsWith('.mp3')){ alert('Debe ser .mp3'); return; }
+
+  db.collection('podcasts').add({
+    title, url, image, desc,
+    date: new Date().toLocaleDateString(),
+    time: Date.now()
+  });
 }
 
-/* ===== LISTAR ===== */
-db.collection("podcasts").orderBy("time","desc")
+/* ===== LISTEN FIRESTORE ===== */
+db.collection('podcasts').orderBy('time','desc')
 .onSnapshot(snap=>{
- podcasts.innerHTML="";
- snap.forEach(doc=>{
-  const d=doc.data();
-
-  podcasts.innerHTML+=`
-  <div class="card">
-    <h3>${d.title}</h3>
-    <audio controls src="${d.url}"></audio>
-    <br>
-    <button onclick="openStudy('${d.title}')">Modo estudio</button>
-  </div>`;
- });
+  queue = [];
+  snap.forEach(doc=> queue.push(doc.data()));
+  render();
 });
 
-/* ===== MODO ESTUDIO ===== */
-function openStudy(title){
-
- document.getElementById("studyMode").style.display="block";
-
- document.getElementById("summary").innerText=
- "Este episodio trata sobre: " + title;
-
- document.getElementById("concepts").innerHTML=`
-  <li>Concepto principal</li>
-  <li>Aplicación clínica</li>
-  <li>Importancia</li>
- `;
-
- document.getElementById("questions").innerHTML=`
-  <div class="question">¿Qué es ${title}?</div>
-  <div class="question">¿Por qué es importante?</div>
- `;
-}
-
-function closeStudy(){
- document.getElementById("studyMode").style.display="none";
-}
+/* ===== ACCESIBILIDAD BÁSICA ===== */
+$audio.addEventListener('play', ()=> $btnPlay.textContent='Pausa');
+$audio.addEventListener('pause', ()=> $btnPlay.textContent='Play');
 
 </script>
-
 </body>
 </html>
