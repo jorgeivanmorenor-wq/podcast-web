@@ -180,7 +180,59 @@ button{
   line-height:1.6;
   opacity:0.9;
 }
+/* ================= MODO CELULAR PRO ================= */
+@media (max-width:600px){
 
+  .nav{
+    padding:15px;
+  }
+
+  .menu span{
+    margin:0 8px;
+    font-size:14px;
+  }
+
+  .section{
+    padding:20px;
+  }
+
+  .hero{
+    flex-direction:column;
+    text-align:center;
+    padding:20px;
+  }
+
+  .hero-text h1{
+    font-size:38px;
+  }
+
+  .hero-text p{
+    font-size:16px;
+  }
+
+  .uni-img{
+    width:90%;
+  }
+
+  .circle{
+    width:150px;
+    height:150px;
+    margin-top:20px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  input{
+    width:100%;
+  }
+
+  button{
+    width:100%;
+  }
+
+}
 </style>
 </head>
 
@@ -326,6 +378,6 @@ function show(section){
 }
 
 </script>
-
+    
 </body>
 </html>
