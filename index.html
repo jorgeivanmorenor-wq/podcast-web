@@ -1,65 +1,242 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Entre Estudiantes</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entre Estudiantes</title>
 
-  <!-- Estilos -->
-  <style>
-    body{
-      margin:0;
-      font-family: Arial, sans-serif;
-      color:white;
-      background: linear-gradient(-45deg, #000, #1a1a1a, #0f2027, #203a43);
-      background-size: 400% 400%;
-      animation: bg 12s ease infinite;
-    }
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 
-    @keyframes bg {
-      0% {background-position: 0% 50%;}
-      50% {background-position: 100% 50%;}
-      100% {background-position: 0% 50%;}
-    }
+<style>
 
-    .container{
-      text-align:center;
-      padding:60px 20px;
-    }
+/* ===== GENERAL ===== */
+body{
+  margin:0;
+  font-family:Arial;
+  background: radial-gradient(circle at 20% 20%, #1a0033, #000);
+  color:white;
+}
 
-    h1{
-      font-size:40px;
-      margin-bottom:10px;
-    }
+/* ===== NAV ===== */
+.nav{
+  display:flex;
+  justify-content:space-between;
+  padding:20px 40px;
+  background:black;
+}
 
-    p{
-      opacity:0.8;
-      margin-bottom:30px;
-    }
+/* ===== SECCIONES ===== */
+.section{
+  display:none;
+  padding:50px;
+  opacity:0;
+  transform:translateY(30px);
+  transition:.5s;
+}
 
-    .btn{
-      background:#00c3ff;
-      padding:12px 20px;
-      border-radius:10px;
-      text-decoration:none;
-      color:black;
-      font-weight:bold;
-      transition:0.3s;
-    }
+.active{
+  display:block;
+  opacity:1;
+  transform:translateY(0);
+}
 
-    .btn:hover{
-      background:#00a2d6;
-      transform:scale(1.05);
-    }
-  </style>
+/* ===== HERO ===== */
+.hero{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.hero h1{font-size:80px;}
+.hero span{color:#b7ff00;}
+
+/* ===== BOTONES ===== */
+button{
+  padding:12px 20px;
+  border:none;
+  border-radius:20px;
+  background:#b7ff00;
+  cursor:pointer;
+}
+
+/* ===== GRID ===== */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(250px,1fr));
+  gap:20px;
+}
+
+.card{
+  background:#1a1a1a;
+  padding:15px;
+  border-radius:10px;
+}
+
+/* ===== MODO ESTUDIO ===== */
+.study-box{
+  margin-top:20px;
+  padding:20px;
+  background:#0f172a;
+  border-radius:15px;
+  display:none;
+}
+
+.study-box h3{color:#b7ff00;}
+
+.question{
+  margin-top:10px;
+  padding:10px;
+  background:#111;
+  border-radius:10px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  .hero{flex-direction:column;text-align:center;}
+  .hero h1{font-size:40px;}
+}
+
+</style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>🎙️ Entre Estudiantes</h1>
-    <p>Podcast universitario sobre medicina, aprendizaje y experiencias reales</p>
 
-    <a class="btn" href="#">Escuchar episodios</a>
+<div class="nav">
+  <div>🎧 Entre Estudiantes</div>
+  <div>
+    <span onclick="show('inicio')">Inicio</span>
+    <span onclick="show('episodios')">Episodios</span>
+    <span onclick="show('subir')">Subir</span>
+    <span onclick="show('nosotros')">Nosotros</span>
   </div>
+</div>
+
+<!-- INICIO -->
+<div id="inicio" class="section active">
+  <div class="hero">
+    <div>
+      <h1>ENTRE <span>ESTUDIANTES</span></h1>
+      <p>Tu voz. Tu historia.</p>
+    </div>
+  </div>
+</div>
+
+<!-- EPISODIOS -->
+<div id="episodios" class="section">
+  <h2>Episodios</h2>
+  <div id="podcasts" class="grid"></div>
+
+  <div id="studyMode" class="study-box">
+    <h3>📚 Modo Estudio</h3>
+
+    <p id="summary"></p>
+
+    <h4>Conceptos clave</h4>
+    <ul id="concepts"></ul>
+
+    <h4>Preguntas tipo examen</h4>
+    <div id="questions"></div>
+
+    <button onclick="closeStudy()">Cerrar</button>
+  </div>
+</div>
+
+<!-- SUBIR -->
+<div id="subir" class="section">
+  <h2>Subir episodio</h2>
+  <input id="title" placeholder="Título"><br>
+  <input id="audioURL" placeholder="Link .mp3"><br>
+  <button onclick="addPodcast()">Subir</button>
+</div>
+
+<!-- NOSOTROS -->
+<div id="nosotros" class="section">
+  <h2>¿Quiénes somos?</h2>
+
+  <p>
+  Somos estudiantes de medicina de tercer semestre que creamos este podcast como proyecto académico dentro de la materia de emprendimiento.
+  </p>
+
+  <h3>Misión</h3>
+  <p>
+  Crear un espacio donde estudiantes encuentren apoyo académico y emocional.
+  </p>
+
+  <h3>Visión</h3>
+  <p>
+  Ser un referente estudiantil en el área de la salud.
+  </p>
+</div>
+
+<script>
+
+/* ===== FIREBASE ===== */
+firebase.initializeApp({
+  apiKey:"AIzaSyDz5tYhKP1gX2UToItY0VarGLCJLoffjbg",
+  authDomain:"entre-estudiantes.firebaseapp.com",
+  projectId:"entre-estudiantes"
+});
+
+const db=firebase.firestore();
+
+/* ===== CAMBIO SECCIÓN ===== */
+function show(section){
+ document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+ setTimeout(()=>document.getElementById(section).classList.add("active"),150);
+}
+
+/* ===== SUBIR ===== */
+function addPodcast(){
+ db.collection("podcasts").add({
+  title:title.value,
+  url:audioURL.value,
+  time:Date.now()
+ });
+}
+
+/* ===== LISTAR ===== */
+db.collection("podcasts").orderBy("time","desc")
+.onSnapshot(snap=>{
+ podcasts.innerHTML="";
+ snap.forEach(doc=>{
+  const d=doc.data();
+
+  podcasts.innerHTML+=`
+  <div class="card">
+    <h3>${d.title}</h3>
+    <audio controls src="${d.url}"></audio>
+    <br>
+    <button onclick="openStudy('${d.title}')">Modo estudio</button>
+  </div>`;
+ });
+});
+
+/* ===== MODO ESTUDIO ===== */
+function openStudy(title){
+
+ document.getElementById("studyMode").style.display="block";
+
+ document.getElementById("summary").innerText=
+ "Este episodio trata sobre: " + title;
+
+ document.getElementById("concepts").innerHTML=`
+  <li>Concepto principal</li>
+  <li>Aplicación clínica</li>
+  <li>Importancia</li>
+ `;
+
+ document.getElementById("questions").innerHTML=`
+  <div class="question">¿Qué es ${title}?</div>
+  <div class="question">¿Por qué es importante?</div>
+ `;
+}
+
+function closeStudy(){
+ document.getElementById("studyMode").style.display="none";
+}
+
+</script>
+
 </body>
 </html>
