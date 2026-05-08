@@ -191,9 +191,27 @@ scale(1.05);
 
 }
 /* ================= SECCIONES ================= */
-.section{display:none;padding:40px;}
-.active{display:block;}
+.section{
 
+display:none;
+
+padding:40px;
+
+position:relative;
+
+z-index:2;
+
+background:transparent;
+
+}
+
+.active{
+
+display:block;
+
+min-height:100vh;
+
+}
 /* ================= HERO ================= */
 .hero{
 
@@ -549,7 +567,7 @@ transform:translateY(0);
 
 .particle{
 
-position:absolute;
+position:fixed;
 
 width:4px;
 height:4px;
@@ -558,9 +576,17 @@ border-radius:50%;
 
 background:#b7ff00;
 
-opacity:.5;
+opacity:.7;
 
-animation:float 8s linear infinite;
+pointer-events:none;
+
+z-index:1;
+
+box-shadow:
+0 0 10px #b7ff00,
+0 0 20px rgba(183,255,0,.7);
+
+animation:float 10s linear infinite;
 
 }
 
