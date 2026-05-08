@@ -60,32 +60,7 @@ rgba(183,255,0,.05),
 transparent 30%
 );
 
-}
-position:fixed;
-inset:0;
-z-index:-1;
-
-background:
-radial-gradient(
-circle at 20% 20%,
-rgba(183,255,0,.15),
-transparent 30%
-),
-
-radial-gradient(
-circle at 80% 30%,
-rgba(120,0,255,.12),
-transparent 30%
-),
-
-radial-gradient(
-circle at 50% 80%,
-rgba(183,255,0,.10),
-transparent 30%
-);
-
-}
-
+}  
 /* ================= NAV ================= */
   .logo-container{
 display:flex;
@@ -130,26 +105,6 @@ z-index:999;
 
 }
 
-.menu span{
-
-margin:0 18px;
-
-cursor:pointer;
-
-transition:.4s;
-
-font-size:28px;
-
-font-weight:bold;
-
-padding:10px 18px;
-border-radius:40px;
-
-position:relative;
-
-color:white;
-
-}
 
 .menu span{
 
@@ -340,42 +295,6 @@ transform:translateY(0px);
 
 }
 
-  /* ================= LOGO HERO ================= */
-
-.hero-logo{
-
-display:flex;
-justify-content:center;
-align-items:center;
-
-}
-
-.main-logo{
-
-width:520px;
-
-animation:floatLogo 5s ease-in-out infinite;
-
-filter:
-drop-shadow(0 0 25px rgba(183,255,0,.25));
-
-}
-
-@keyframes floatLogo{
-
-0%{
-transform:translateY(0px);
-}
-
-50%{
-transform:translateY(-15px);
-}
-
-100%{
-transform:translateY(0px);
-}
-
-}
 /* ================= GRID ================= */
 .grid{
   display:grid;
@@ -456,9 +375,6 @@ button{
   max-width:800px;
   line-height:1.6;
   opacity:0.9;
-}
-  /* ================= COMUNIDAD ================= */
-
 }
 
 /* ================= MENSAJES ================= */
@@ -980,6 +896,19 @@ font-size:22px;
 padding:15px;
 
 }
+  /* ================= DESCRIPCION PODCAST ================= */
+
+.pod-desc{
+
+padding:0 15px 15px;
+
+opacity:.75;
+
+line-height:1.5;
+
+font-size:15px;
+
+}
 
 /* ================= AUDIO ================= */
 
@@ -1298,6 +1227,9 @@ db.collection("podcasts").orderBy("time","desc")
   <div class="card">
     <img src="${d.image || 'https://via.placeholder.com/300'}">
     <h3>${d.title}</h3>
+    <p class="pod-desc">
+${d.desc || ""}
+</p>
     <audio controls src="${d.url}"></audio>
   </div>
   `;
