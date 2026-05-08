@@ -103,7 +103,7 @@ position:sticky;
 top:0;
 
 z-index:999;
-
+transition:transform .4s ease;
 }
 
 
@@ -347,20 +347,33 @@ box-shadow:
 
 transform:
 perspective(1000px)
-rotateX(5deg)
-rotateY(-5deg)
-translateY(-10px)
+rotateX(4deg)
+rotateY(-4deg)
+translateY(-12px)
 scale(1.03);
 
 box-shadow:
-0 0 35px rgba(183,255,0,.35);
+0 0 40px rgba(183,255,0,.35);
+
+}
+
+.card:hover img{
+
+transform:scale(1.08);
+
+filter:
+brightness(1);
 
 }
 
 .card img{
-  width:100%;
-  height:180px;
-  object-fit:cover;
+width:100%;
+height:220px;
+object-fit:cover;
+transition:.5s;
+filter:
+brightness(.78);
+
 }
 
 .card h3{
@@ -1064,6 +1077,93 @@ margin-bottom:20px;
 }
 
 }
+  /* ================= FEATURED PODCAST ================= */
+
+.featured-card{
+
+display:flex;
+
+align-items:center;
+
+gap:30px;
+
+margin-bottom:40px;
+
+padding:25px;
+
+border-radius:35px;
+
+background:
+rgba(255,255,255,.05);
+
+backdrop-filter:blur(20px);
+
+border:
+1px solid rgba(255,255,255,.08);
+
+box-shadow:
+0 0 40px rgba(183,255,0,.08);
+
+overflow:hidden;
+
+}
+
+.featured-card img{
+
+width:320px;
+
+height:320px;
+
+object-fit:cover;
+
+border-radius:25px;
+
+filter:
+brightness(.85);
+
+}
+
+.featured-info{
+
+flex:1;
+
+}
+
+.featured-info h2{
+
+font-size:48px;
+
+margin-bottom:15px;
+
+color:#b7ff00;
+
+}
+
+.featured-info p{
+
+font-size:18px;
+
+line-height:1.7;
+
+opacity:.85;
+
+margin-bottom:25px;
+
+}
+
+.featured-label{
+
+font-size:15px;
+
+letter-spacing:3px;
+
+margin-bottom:15px;
+
+color:#b7ff00;
+
+opacity:.7;
+
+}
 </style>
 </head>
 
@@ -1133,7 +1233,9 @@ Feedback
 <!-- ================= EPISODIOS ================= -->
 <div id="episodios" class="section">
   <h2>Episodios</h2>
-  <div id="podcasts" class="grid"></div>
+<div id="featuredPodcast"></div>
+
+<div id="podcasts" class="grid"></div>
 </div>
 
 <!-- ================= SUBIR ================= -->
@@ -1241,23 +1343,63 @@ function addPodcast(){
 db.collection("podcasts").orderBy("time","desc")
 .onSnapshot(snapshot=>{
  podcasts.innerHTML="";
-
+let first = true;
  snapshot.forEach(doc=>{
   const d=doc.data();
 
-  podcasts.innerHTML+=`
-  <div class="card">
-    <img src="${d.image || 'https://via.placeholder.com/300'}">
-    <h3>${d.title}</h3>
-    <p class="pod-desc">
+  if(first){
+
+featuredPodcast.innerHTML = `
+
+<div class="featured-card">
+
+<img src="${d.image || 'https://via.placeholder.com/300'}">
+
+<div class="featured-info">
+
+<div class="featured-label">
+🔥 EPISODIO DESTACADO
+</div>
+
+<h2>
+${d.title}
+</h2>
+
+<p>
 ${d.desc || ""}
 </p>
-    <audio controls src="${d.url}"></audio>
-  </div>
-  `;
- });
-});
 
+<audio controls src="${d.url}"></audio>
+
+</div>
+
+</div>
+
+`;
+
+first = false;
+
+}else{
+
+podcasts.innerHTML+=`
+
+<div class="card">
+
+<img src="${d.image || 'https://via.placeholder.com/300'}">
+
+<h3>${d.title}</h3>
+
+<p class="pod-desc">
+${d.desc || ""}
+</p>
+
+<audio controls src="${d.url}"></audio>
+
+</div>
+
+`;
+
+}
 function show(section){
  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
  document.getElementById(section).classList.add("active");
@@ -1494,5 +1636,39 @@ src="https://i.ibb.co/cS061Qdz/logo.png">
 </div>
 
 </div>
+  <script>
+
+/* ================= NAV HIDE ================= */
+
+let lastScroll = 0;
+
+const nav =
+document.querySelector(".nav");
+
+window.addEventListener(
+"scroll",
+()=>{
+
+const current =
+window.pageYOffset;
+
+if(current > lastScroll){
+
+nav.style.transform =
+"translateY(-100%)";
+
+}else{
+
+nav.style.transform =
+"translateY(0)";
+
+}
+
+lastScroll = current;
+
+}
+);
+
+</script>
 </body>
 </html>
