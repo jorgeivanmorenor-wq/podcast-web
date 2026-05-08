@@ -14,8 +14,44 @@
 body{
   margin:0;
   font-family:Arial;
-  background: radial-gradient(circle at 20% 20%, #1a0033, #000);
+
+  background:
+  linear-gradient(
+  135deg,
+  #050010,
+  #1a0033,
+  #000
+  );
+
   color:white;
+  overflow-x:hidden;
+}
+
+.bg{
+
+position:fixed;
+inset:0;
+z-index:-1;
+
+background:
+radial-gradient(
+circle at 20% 20%,
+rgba(183,255,0,.15),
+transparent 30%
+),
+
+radial-gradient(
+circle at 80% 30%,
+rgba(120,0,255,.12),
+transparent 30%
+),
+
+radial-gradient(
+circle at 50% 80%,
+rgba(183,255,0,.10),
+transparent 30%
+);
+
 }
 
 /* ================= NAV ================= */
@@ -233,11 +269,48 @@ button{
   }
 
 }
+  /* ================= PARTICULAS ================= */
+
+.particle{
+
+position:absolute;
+
+width:4px;
+height:4px;
+
+border-radius:50%;
+
+background:#b7ff00;
+
+opacity:.5;
+
+animation:float 8s linear infinite;
+
+}
+
+@keyframes float{
+
+from{
+transform:translateY(100vh);
+}
+
+to{
+transform:translateY(-100px);
+}
+
+}
 </style>
 </head>
 
 <body>
+<div class="bg"></div>
 
+<div class="particle" style="left:10%;animation-duration:9s;"></div>
+<div class="particle" style="left:20%;animation-duration:7s;"></div>
+<div class="particle" style="left:35%;animation-duration:11s;"></div>
+<div class="particle" style="left:50%;animation-duration:6s;"></div>
+<div class="particle" style="left:65%;animation-duration:10s;"></div>
+<div class="particle" style="left:80%;animation-duration:8s;"></div>
 <!-- NAV -->
 <div class="nav">
   <div>🎧 Entre Estudiantes</div>
