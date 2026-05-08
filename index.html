@@ -1400,9 +1400,20 @@ ${d.desc || ""}
 `;
 
 }
+
+});
+
+});
+
 function show(section){
- document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
- document.getElementById(section).classList.add("active");
+
+document.querySelectorAll(".section")
+.forEach(s=>s.classList.remove("active"));
+
+document
+.getElementById(section)
+.classList.add("active");
+
 }
 /* ================= COMUNIDAD ================= */
 
