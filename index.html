@@ -122,42 +122,6 @@ transparent 30%
   transform:scale(1.05);
 }
 
-/* ================= IMAGEN UNIVERSIDAD ================= */
-.uni-container{
-  background:rgba(255,255,255,0.05);
-  padding:15px;
-  border-radius:15px;
-  backdrop-filter:blur(10px);
-  box-shadow:0 0 30px rgba(255,255,255,0.15);
-  transition:0.4s;
-  width:fit-content;
-}
-
-.uni-container:hover{
-  transform:scale(1.05);
-}
-
-.uni-img{
-  width:320px;
-  border-radius:10px;
-  display:block;
-}
-
-/* ================= NEON ================= */
-.circle{
-  width:300px;
-  height:300px;
-  border-radius:50%;
-  background: radial-gradient(circle, #ff00ff, #5a00ff);
-  box-shadow:0 0 80px #ff00ff;
-  animation: glow 2s infinite alternate;
-}
-
-@keyframes glow{
-  from{ box-shadow:0 0 40px #ff00ff; }
-  to{ box-shadow:0 0 120px #ff00ff; }
-}
-
 /* ================= GRID ================= */
 .grid{
   display:grid;
@@ -336,13 +300,9 @@ transform:translateY(-100px);
       </div>
 
       <!-- ✅ TU IMAGEN REAL -->
-      <div class="uni-container">
-        <img class="uni-img" src="download.png">
-      </div>
-
+    
     </div>
 
-    <div class="circle"></div>
 
   </div>
 </div>
