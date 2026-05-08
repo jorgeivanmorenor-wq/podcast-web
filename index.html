@@ -55,12 +55,47 @@ transparent 30%
 }
 
 /* ================= NAV ================= */
+  .logo-container{
+display:flex;
+align-items:center;
+}
+
+.logo-img{
+height:70px;
+object-fit:contain;
+
+filter:
+drop-shadow(0 0 10px rgba(183,255,0,.25));
+
+transition:.3s;
+}
+
+.logo-img:hover{
+transform:scale(1.05);
+}
 .nav{
-  display:flex;
-  justify-content:space-between;
-  padding:20px 40px;
-  background:black;
-  align-items:center;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:15px 40px;
+
+background:rgba(0,0,0,.25);
+
+backdrop-filter:blur(15px);
+
+border-bottom:
+1px solid rgba(255,255,255,.08);
+
+position:sticky;
+
+top:0;
+
+z-index:999;
+
 }
 
 .menu span{
@@ -277,8 +312,9 @@ transform:translateY(-100px);
 <div class="particle" style="left:80%;animation-duration:8s;"></div>
 <!-- NAV -->
 <div class="nav">
-  <div>🎧 Entre Estudiantes</div>
-  <div class="menu">
+<div class="logo-container">
+  <img src="logo.png" class="logo-img">
+</div>  <div class="menu">
     <span onclick="show('inicio')">Inicio</span>
     <span onclick="show('episodios')">Episodios</span>
     <span onclick="show('subir')">Subir</span>
