@@ -798,25 +798,21 @@ transparent 100%
 pointer-events:none;
 
 }
-  /* ================= SCROLL ================= */
+/* ================= CONSTELLATION ================= */
 
-::-webkit-scrollbar{
+#constellation{
 
-width:10px;
+position:fixed;
 
-}
+top:0;
+left:0;
 
-::-webkit-scrollbar-track{
+width:100%;
+height:100%;
 
-background:#050505;
+z-index:0;
 
-}
-
-::-webkit-scrollbar-thumb{
-
-background:#b7ff00;
-
-border-radius:20px;
+pointer-events:none;
 
 }
 </style>
@@ -824,6 +820,7 @@ border-radius:20px;
 
 <body>
 <div class="bg"></div>
+<canvas id="constellation"></canvas>
 <div class="grid-bg"></div>
 <div class="particle" style="left:10%;animation-duration:9s;"></div>
 <div class="particle" style="left:20%;animation-duration:7s;"></div>
@@ -1070,6 +1067,122 @@ ${d.message}
 
 });
 </script>
-    
+    <script>
+
+/* ================= CONSTELLATION ================= */
+
+const canvas =
+document.getElementById("constellation");
+
+const ctx =
+canvas.getContext("2d");
+
+canvas.width =
+window.innerWidth;
+
+canvas.height =
+window.innerHeight;
+
+let points = [];
+
+for(let i=0;i<45;i++){
+
+points.push({
+
+x:Math.random()*canvas.width,
+
+y:Math.random()*canvas.height,
+
+vx:(Math.random()-.5)*0.4,
+
+vy:(Math.random()-.5)*0.4
+
+});
+
+}
+
+function drawConstellation(){
+
+ctx.clearRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+for(let i=0;i<points.length;i++){
+
+let p = points[i];
+
+p.x += p.vx;
+p.y += p.vy;
+
+if(
+p.x < 0 ||
+p.x > canvas.width
+)
+p.vx *= -1;
+
+if(
+p.y < 0 ||
+p.y > canvas.height
+)
+p.vy *= -1;
+
+for(let j=i+1;j<points.length;j++){
+
+let p2 = points[j];
+
+let dist =
+Math.hypot(
+p.x-p2.x,
+p.y-p2.y
+);
+
+if(dist < 140){
+
+ctx.beginPath();
+
+ctx.moveTo(p.x,p.y);
+
+ctx.lineTo(p2.x,p2.y);
+
+ctx.strokeStyle =
+`rgba(183,255,0,${
+1-dist/140
+})`;
+
+ctx.lineWidth = .5;
+
+ctx.stroke();
+
+}
+
+}
+
+}
+
+requestAnimationFrame(
+drawConstellation
+);
+
+}
+
+drawConstellation();
+
+window.addEventListener(
+"resize",
+()=>{
+
+canvas.width =
+window.innerWidth;
+
+canvas.height =
+window.innerHeight;
+
+}
+);
+
+</script>
 </body>
 </html>
