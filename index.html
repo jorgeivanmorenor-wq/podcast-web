@@ -12,23 +12,55 @@
 
 /* ================= GENERAL ================= */
 body{
-  margin:0;
-  font-family:Arial;
 
-  background:
-  linear-gradient(
-  135deg,
-  #050010,
-  #1a0033,
-  #000
-  );
+margin:0;
 
-  color:white;
-  overflow-x:hidden;
+font-family:Arial;
+
+background:
+linear-gradient(
+135deg,
+#000000,
+#050505,
+#0a0014,
+#000000
+);
+
+color:white;
+
+overflow-x:hidden;
+
 }
 
 .bg{
 
+position:fixed;
+
+inset:0;
+
+z-index:-1;
+
+background:
+
+radial-gradient(
+circle at 20% 20%,
+rgba(183,255,0,.10),
+transparent 30%
+),
+
+radial-gradient(
+circle at 80% 30%,
+rgba(0,255,150,.08),
+transparent 30%
+),
+
+radial-gradient(
+circle at 50% 80%,
+rgba(183,255,0,.05),
+transparent 30%
+);
+
+}
 position:fixed;
 inset:0;
 z-index:-1;
@@ -205,12 +237,15 @@ align-items:center;
 
 .main-logo{
 
-width:420px;
+width:620px;
 
-animation:floatLogo 4s ease-in-out infinite;
+animation:floatLogo 5s ease-in-out infinite;
 
 filter:
-drop-shadow(0 0 25px rgba(183,255,0,.25));
+drop-shadow(0 0 25px rgba(183,255,0,.35))
+drop-shadow(0 0 80px rgba(183,255,0,.20));
+
+mix-blend-mode:screen;
 
 }
 
