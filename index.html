@@ -29,7 +29,8 @@ linear-gradient(
 color:white;
 
 overflow-x:hidden;
-
+max-width:100vw;
+  
 }
 
 .bg{
@@ -155,6 +156,18 @@ position:relative;
 z-index:2;
 
 background:transparent;
+width:100%;
+overflow:hidden;
+
+opacity:0;
+
+transform:
+translateY(30px)
+scale(.98);
+
+transition:
+opacity .5s ease,
+transform .5s ease;
 
 }
 
@@ -163,6 +176,12 @@ background:transparent;
 display:block;
 
 min-height:100vh;
+
+opacity:1;
+
+transform:
+translateY(0)
+scale(1);
 
 }
 /* ================= HERO ================= */
