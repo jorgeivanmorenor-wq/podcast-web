@@ -128,14 +128,33 @@ z-index:999;
 }
 
 .hero-text h1{
-  font-size:65px;
-  margin:0;
-  letter-spacing:2px;
+
+font-size:110px;
+
+line-height:.95;
+
+font-weight:bold;
+
+margin:0;
+
+letter-spacing:2px;
+
+color:white;
+
+text-shadow:
+0 0 15px rgba(255,255,255,.2);
+
 }
 
 .hero-text span{
-  color:#b7ff00;
-  text-shadow:0 0 20px #b7ff00;
+
+color:#b7ff00;
+
+text-shadow:
+0 0 15px #b7ff00,
+0 0 30px #b7ff00,
+0 0 60px rgba(183,255,0,.7);
+
 }
 
 .hero-text p{
@@ -144,13 +163,30 @@ z-index:999;
 }
 
 .hero button{
-  padding:15px 25px;
-  border:none;
-  border-radius:30px;
-  background:#b7ff00;
-  font-weight:bold;
-  cursor:pointer;
-  transition:0.3s;
+
+margin-top:35px;
+
+padding:20px 38px;
+
+border:none;
+
+border-radius:50px;
+
+background:#b7ff00;
+
+color:black;
+
+font-weight:bold;
+
+font-size:20px;
+
+cursor:pointer;
+
+transition:.4s;
+
+box-shadow:
+0 0 20px rgba(183,255,0,.5);
+
 }
 
 .hero button:hover{
@@ -186,6 +222,43 @@ transform:translateY(0px);
 
 50%{
 transform:translateY(-12px);
+}
+
+100%{
+transform:translateY(0px);
+}
+
+}
+
+  /* ================= LOGO HERO ================= */
+
+.hero-logo{
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+}
+
+.main-logo{
+
+width:520px;
+
+animation:floatLogo 5s ease-in-out infinite;
+
+filter:
+drop-shadow(0 0 25px rgba(183,255,0,.25));
+
+}
+
+@keyframes floatLogo{
+
+0%{
+transform:translateY(0px);
+}
+
+50%{
+transform:translateY(-15px);
 }
 
 100%{
@@ -361,23 +434,40 @@ transform:translateY(-100px);
 
 <!-- ================= INICIO ================= -->
 <div id="inicio" class="section active">
+
   <div class="hero">
 
     <div class="hero-left">
 
       <div class="hero-text">
-        <h1>ENTRE <span>ESTUDIANTES</span></h1>
-        <p>Tu voz. Tu historia. Tu podcast.</p>
-        <button onclick="show('episodios')">Escuchar ahora</button>
+
+        <h1>
+          ENTRE <span>ESTUDIANTES</span>
+        </h1>
+
+        <p>
+          Tu voz. Tu historia. Tu podcast.
+        </p>
+
+        <button onclick="show('episodios')">
+          Escuchar ahora
+        </button>
+
       </div>
 
     </div>
 
+    <!-- LOGO -->
     <div class="hero-logo">
-      <img src="./logo.png" class="main-logo">
+
+      <img
+      src="./logo.png"
+      class="main-logo">
+
     </div>
 
   </div>
+
 </div>
 <!-- ================= EPISODIOS ================= -->
 <div id="episodios" class="section">
